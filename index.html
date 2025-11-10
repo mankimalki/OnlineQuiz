@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Assessment Quiz</title>
+    <title>Mathematics Assessment Quiz</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Math fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Math&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Math&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -117,18 +115,6 @@
             border-left: 4px solid #2c5aa0;
         }
         
-        .math-symbol {
-            font-family: 'Noto Sans Symbols 2', sans-serif;
-        }
-        
-        .question-image {
-            max-width: 100%;
-            max-height: 300px;
-            margin: 15px 0;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
         .options-container {
             display: flex;
             flex-direction: column;
@@ -181,35 +167,6 @@
         .btn-submit {
             background: #28a745;
             color: white;
-        }
-        
-        .warning-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .warning-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 400px;
-            margin: 20px;
-        }
-        
-        .warning-count {
-            font-size: 48px;
-            font-weight: 700;
-            color: #dc3545;
-            margin: 20px 0;
         }
         
         .completion-screen {
@@ -301,6 +258,15 @@
             color: #0c5460;
             border: 1px solid #bee5eb;
         }
+        
+        .debug-info {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-top: 10px;
+            word-break: break-all;
+        }
     </style>
 </head>
 <body>
@@ -340,7 +306,6 @@
                 <div id="question-section">
                     <div class="question-container">
                         <div class="question-text" id="question-text"></div>
-                        <img id="question-image" class="question-image" style="display: none;">
                         <div class="options-container" id="options-container"></div>
                     </div>
                     
@@ -353,36 +318,23 @@
             
             <div id="completion-section" class="completion-screen" style="display: none;">
                 <div class="completion-icon">✓</div>
-                <div class="completion-message">Assessment Submitted Successfully!</div>
+                <div class="completion-message" id="completion-message">Assessment Submitted Successfully!</div>
                 <p>Your responses have been recorded. Results will be available to your instructor.</p>
                 <div id="submission-status" class="submission-status submission-loading">
-                    <div class="spinner" style="width: 30px; height: 30px; border-width: 3px;"></div>
+                    <div class="spinner" style="width: 30px; height: 30px; border-width: 3px; display: inline-block;"></div>
                     <p>Submitting results to server...</p>
                 </div>
+                <div id="debug-info" class="debug-info" style="display: none;"></div>
             </div>
-        </div>
-    </div>
-    
-    <div class="warning-modal" id="warning-modal">
-        <div class="warning-content">
-            <h2>Warning!</h2>
-            <p>Please return to the test window immediately.</p>
-            <div class="warning-count" id="warning-count">3</div>
-            <p>Multiple violations will result in test termination.</p>
         </div>
     </div>
 
     <script>
-        // Quiz configuration
+        // Quiz configuration - YOUR GOOGLE APPS SCRIPT ID INTEGRATED
         const config = {
-            // Google Apps Script Web App URL - YOUR SCRIPT URL INTEGRATED
-            submitUrl: 'https://script.google.com/macros/s/AKfycbwDx-OiARqTvBoV_oLM60BY9xBWce9mJX2TGPcWaiydSaqmQ9J1sYf1SwodGElqlcz0/exec',
-            
-            // Quiz settings
-            questionTime: 60, // seconds per question
+            submitUrl: 'https://script.google.com/macros/s/AKfycbyqFYnRvsFErm_p36NS3A37u4_c5UEvvj43rAj3aqZ8xnQPyXRyoGTW538C1nTdwzKe/exec',
+            questionTime: 60,
             maxCheatingAttempts: 5,
-            
-            // URLs
             questionsUrl: 'questions.json'
         };
 
@@ -401,35 +353,18 @@
             cheatingAttempts: 0
         };
         
-        // Timer variables
         let timeLeft = config.questionTime;
         let timerInterval;
         let questionStartTime;
 
-        // Anti-cheating monitoring
-        let windowFocusLost = 0;
-        let tabSwitches = 0;
-        let cheatingAttempts = 0;
-
-        // Initialize quiz
         async function initQuiz() {
             try {
-                // Load questions from JSON
                 await loadQuestions();
-                
-                // Hide loading, show quiz
                 document.getElementById('loading-container').style.display = 'none';
                 document.getElementById('quiz-section').style.display = 'block';
-                
-                // Initialize anti-cheating
                 setupAntiCheating();
-                
-                // Start with first question
                 showQuestion();
-                
-                // Record start time
                 studentData.startTime = new Date();
-                
             } catch (error) {
                 console.error('Error initializing quiz:', error);
                 document.getElementById('loading-container').style.display = 'none';
@@ -437,47 +372,38 @@
             }
         }
 
-        // Load questions from JSON file
         async function loadQuestions() {
             try {
                 const response = await fetch(config.questionsUrl);
-                if (!response.ok) {
-                    throw new Error('Failed to load questions');
-                }
+                if (!response.ok) throw new Error('Failed to load questions');
                 quizData = await response.json();
-                
-                // Initialize student answers array
                 studentData.answers = new Array(quizData.length).fill(null);
                 studentData.timePerQuestion = new Array(quizData.length).fill(0);
-                
             } catch (error) {
                 console.error('Error loading questions:', error);
-                // Fallback to sample questions if JSON fails
-                console.log('Using fallback questions');
                 quizData = getFallbackQuestions();
                 studentData.answers = new Array(quizData.length).fill(null);
                 studentData.timePerQuestion = new Array(quizData.length).fill(0);
             }
         }
 
-        // Fallback questions if JSON fails to load
         function getFallbackQuestions() {
             return [
                 {
-                    "question": "Solve the following equation for x:",
+                    "question": "Solve the equation for x:",
                     "mathExpression": "2x + 5 = 13",
                     "options": ["x = 4", "x = 5", "x = 6", "x = 7"],
                     "correctAnswer": 0
                 },
                 {
-                    "question": "What is the value of the following expression?",
-                    "mathExpression": "∫<sub>0</sub><sup>1</sup> x² dx",
+                    "question": "What is the integral of x² from 0 to 1?",
+                    "mathExpression": "∫₀¹ x² dx",
                     "options": ["1/2", "1/3", "1/4", "1/5"],
                     "correctAnswer": 1
                 },
                 {
-                    "question": "Simplify the following expression:",
-                    "mathExpression": "√(16) + ∛(27)",
+                    "question": "Simplify the expression:",
+                    "mathExpression": "√16 + ∛27",
                     "options": ["5", "6", "7", "8"],
                     "correctAnswer": 2
                 },
@@ -492,43 +418,11 @@
                     "mathExpression": "x² - 5x + 6 = 0",
                     "options": ["x = 2, x = 3", "x = 1, x = 6", "x = -2, x = -3", "x = -1, x = -6"],
                     "correctAnswer": 0
-                },
-                {
-                    "question": "What is the value of π (pi) rounded to two decimal places?",
-                    "mathExpression": "",
-                    "options": ["3.14", "3.15", "3.16", "3.17"],
-                    "correctAnswer": 0
-                },
-                {
-                    "question": "Calculate the area of a circle with radius 5:",
-                    "mathExpression": "A = πr²",
-                    "options": ["25π", "50π", "75π", "100π"],
-                    "correctAnswer": 0
-                },
-                {
-                    "question": "What is the solution to the system of equations?",
-                    "mathExpression": "2x + y = 7<br>x - y = 2",
-                    "options": ["x = 3, y = 1", "x = 2, y = 3", "x = 4, y = -1", "x = 1, y = 5"],
-                    "correctAnswer": 0
-                },
-                {
-                    "question": "Evaluate the limit:",
-                    "mathExpression": "lim<sub>x→2</sub> (x² - 4)/(x - 2)",
-                    "options": ["0", "2", "4", "Undefined"],
-                    "correctAnswer": 2
-                },
-                {
-                    "question": "What is the probability of rolling a 6 on a fair die?",
-                    "mathExpression": "",
-                    "options": ["1/6", "1/3", "1/2", "5/6"],
-                    "correctAnswer": 0
                 }
             ];
         }
 
-        // Anti-cheating measures
         function setupAntiCheating() {
-            // Page visibility API
             let visibilityStartTime = null;
             
             document.addEventListener('visibilitychange', function() {
@@ -537,108 +431,45 @@
                 } else if (visibilityStartTime) {
                     const timeAway = (new Date() - visibilityStartTime) / 1000;
                     if (timeAway > 2) {
-                        tabSwitches++;
-                        studentData.tabSwitches = tabSwitches;
-                        cheatingAttempts++;
-                        studentData.cheatingAttempts = cheatingAttempts;
-                        showWarning();
-                        
-                        if (cheatingAttempts >= config.maxCheatingAttempts) {
-                            terminateQuiz("Too many cheating attempts detected");
-                        }
+                        studentData.tabSwitches++;
+                        studentData.cheatingAttempts++;
                     }
                     visibilityStartTime = null;
                 }
             });
 
-            // Window focus/blur
-            let focusStartTime = null;
-            
-            window.addEventListener('blur', function() {
-                focusStartTime = new Date();
-            });
-            
-            window.addEventListener('focus', function() {
-                if (focusStartTime) {
-                    const timeAway = (new Date() - focusStartTime) / 1000;
-                    if (timeAway > 2) {
-                        windowFocusLost++;
-                        studentData.windowFocusLost = windowFocusLost;
-                        cheatingAttempts++;
-                        studentData.cheatingAttempts = cheatingAttempts;
-                        showWarning();
-                        
-                        if (cheatingAttempts >= config.maxCheatingAttempts) {
-                            terminateQuiz("Too many cheating attempts detected");
-                        }
-                    }
-                    focusStartTime = null;
-                }
-            });
-
-            // Disable right-click
             document.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
-                cheatingAttempts++;
-                studentData.cheatingAttempts = cheatingAttempts;
-                showWarning();
+                studentData.cheatingAttempts++;
                 return false;
             });
 
-            // Disable keyboard shortcuts for dev tools
+            // Disable dev tools shortcuts
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'F12' || 
-                    (e.ctrlKey && (e.key === 'u' || e.key === 'U')) ||
-                    (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I' || e.key === 'j' || e.key === 'J' || e.key === 'c' || e.key === 'C'))) {
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
                     e.preventDefault();
-                    cheatingAttempts++;
-                    studentData.cheatingAttempts = cheatingAttempts;
-                    showWarning();
+                    studentData.cheatingAttempts++;
                     return false;
                 }
             });
         }
 
-        function showWarning() {
-            const modal = document.getElementById('warning-modal');
-            const count = document.getElementById('warning-count');
-            let warningTime = 3;
-            
-            modal.style.display = 'flex';
-            count.textContent = warningTime;
-            
-            const countdown = setInterval(() => {
-                warningTime--;
-                count.textContent = warningTime;
-                
-                if (warningTime <= 0) {
-                    clearInterval(countdown);
-                    modal.style.display = 'none';
-                }
-            }, 1000);
-        }
-
         function startTimer() {
             if (timerInterval) clearInterval(timerInterval);
-            
             timeLeft = config.questionTime;
             updateTimerDisplay();
-            
             questionStartTime = new Date();
             
             timerInterval = setInterval(() => {
                 timeLeft--;
                 updateTimerDisplay();
-                
-                if (timeLeft <= 0) {
-                    nextQuestion();
-                }
+                if (timeLeft <= 0) nextQuestion();
             }, 1000);
         }
 
         function updateTimerDisplay() {
             document.getElementById('timer').textContent = timeLeft;
-            
             if (timeLeft < 10) {
                 document.getElementById('timer').style.color = '#dc3545';
             } else if (timeLeft < 30) {
@@ -648,9 +479,9 @@
 
         function showQuestion() {
             const question = quizData[currentQuestion];
-            document.getElementById('question-text').innerHTML = question.question;
-            
             const questionText = document.getElementById('question-text');
+            questionText.innerHTML = question.question;
+            
             if (question.mathExpression) {
                 const mathElement = document.createElement('div');
                 mathElement.className = 'math-expression';
@@ -658,18 +489,8 @@
                 questionText.appendChild(mathElement);
             }
             
-            const questionImage = document.getElementById('question-image');
-            if (question.image) {
-                questionImage.src = question.image;
-                questionImage.style.display = 'block';
-            } else {
-                questionImage.style.display = 'none';
-            }
-            
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
-            
-            const optionLetters = ['A', 'B', 'C', 'D'];
             
             question.options.forEach((option, index) => {
                 const optionElement = document.createElement('div');
@@ -678,37 +499,26 @@
                     optionElement.classList.add('selected');
                 }
                 
-                if (option.includes('π') || option.includes('∫') || option.includes('√') || option.includes('lim') || option.includes('x =')) {
-                    const optionContent = document.createElement('div');
-                    optionContent.className = 'math-option';
-                    
-                    const letterSpan = document.createElement('span');
-                    letterSpan.className = 'option-letter';
-                    letterSpan.textContent = optionLetters[index];
-                    
-                    const textSpan = document.createElement('span');
-                    textSpan.className = 'math-expression';
-                    textSpan.innerHTML = option;
-                    
-                    optionContent.appendChild(letterSpan);
-                    optionContent.appendChild(textSpan);
-                    optionElement.appendChild(optionContent);
-                } else {
-                    const optionContent = document.createElement('div');
-                    optionContent.className = 'math-option';
-                    
-                    const letterSpan = document.createElement('span');
-                    letterSpan.className = 'option-letter';
-                    letterSpan.textContent = optionLetters[index];
-                    
-                    const textSpan = document.createElement('span');
-                    textSpan.textContent = option;
-                    
-                    optionContent.appendChild(letterSpan);
-                    optionContent.appendChild(textSpan);
-                    optionElement.appendChild(optionContent);
-                }
+                const optionContent = document.createElement('div');
+                optionContent.className = 'math-option';
                 
+                const letterSpan = document.createElement('span');
+                letterSpan.className = 'option-letter';
+                letterSpan.textContent = ['A', 'B', 'C', 'D'][index];
+                
+                const textSpan = document.createElement('span');
+                if (option.includes('π') || option.includes('∫') || option.includes('√') || option.includes('x =')) {
+                    textSpan.className = 'math-expression';
+                    textSpan.style.background = 'transparent';
+                    textSpan.style.borderLeft = 'none';
+                    textSpan.style.padding = '0';
+                    textSpan.style.margin = '0';
+                }
+                textSpan.innerHTML = option;
+                
+                optionContent.appendChild(letterSpan);
+                optionContent.appendChild(textSpan);
+                optionElement.appendChild(optionContent);
                 optionElement.onclick = () => selectAnswer(index);
                 optionsContainer.appendChild(optionElement);
             });
@@ -721,16 +531,11 @@
         function selectAnswer(answerIndex) {
             const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
             studentData.timePerQuestion[currentQuestion] = timeSpent;
-            
             studentData.answers[currentQuestion] = answerIndex;
             
             const options = document.querySelectorAll('.option');
             options.forEach((option, index) => {
-                if (index === answerIndex) {
-                    option.classList.add('selected');
-                } else {
-                    option.classList.remove('selected');
-                }
+                option.classList.toggle('selected', index === answerIndex);
             });
         }
 
@@ -744,15 +549,9 @@
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
             
-            if (currentQuestion === 0) {
-                prevBtn.disabled = true;
-                prevBtn.style.opacity = '0.5';
-                prevBtn.style.cursor = 'not-allowed';
-            } else {
-                prevBtn.disabled = false;
-                prevBtn.style.opacity = '1';
-                prevBtn.style.cursor = 'pointer';
-            }
+            prevBtn.disabled = currentQuestion === 0;
+            prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
+            prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
             
             if (currentQuestion === quizData.length - 1) {
                 nextBtn.textContent = 'Submit';
@@ -767,7 +566,6 @@
             if (currentQuestion > 0) {
                 const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
                 studentData.timePerQuestion[currentQuestion] = timeSpent;
-                
                 currentQuestion--;
                 showQuestion();
             }
@@ -798,62 +596,32 @@
                     }
                 });
                 
-                const totalDeductions = (tabSwitches + cheatingAttempts) * 2;
-                let finalScore = score - totalDeductions;
-                if (finalScore < 0) finalScore = 0;
+                // Calculate deductions for cheating attempts
+                const totalDeductions = studentData.cheatingAttempts * 2;
+                let finalScore = Math.max(0, score - totalDeductions);
                 
                 studentData.score = score;
                 studentData.finalScore = finalScore;
                 studentData.totalDeductions = totalDeductions;
                 studentData.percentage = Math.round((finalScore / quizData.length) * 100);
                 
-                // Show completion screen immediately
+                // Show completion screen
                 document.getElementById('quiz-section').style.display = 'none';
                 document.getElementById('completion-section').style.display = 'block';
                 
                 // Submit to Google Apps Script
-                const submissionResult = await submitToGoogleAppsScript(studentData);
-                
-                // Update submission status
-                const statusElement = document.getElementById('submission-status');
-                statusElement.innerHTML = ''; // Clear loading spinner
-                
-                if (submissionResult.success) {
-                    statusElement.className = 'submission-status submission-success';
-                    statusElement.innerHTML = `
-                        <strong>✓ Data successfully saved to Google Sheets</strong><br>
-                        <small>Submission ID: ${submissionResult.submissionId || 'N/A'}</small>
-                        <br><small>Message: ${submissionResult.message || 'Success'}</small>
-                    `;
-                } else {
-                    statusElement.className = 'submission-status submission-error';
-                    statusElement.innerHTML = `
-                        <strong>⚠️ Data saved locally (Google Sheets submission failed)</strong><br>
-                        <small>${submissionResult.error || 'Unknown error'}</small>
-                    `;
-                    // Store data locally as fallback
-                    localStorage.setItem('quizSubmission_' + studentData.studentId, JSON.stringify(studentData));
-                }
+                await submitToGoogleAppsScript(studentData);
                 
             } catch (error) {
                 console.error('Error submitting quiz:', error);
-                document.getElementById('quiz-section').style.display = 'none';
-                document.getElementById('completion-section').style.display = 'block';
-                
-                const statusElement = document.getElementById('submission-status');
-                statusElement.innerHTML = ''; // Clear loading spinner
-                statusElement.className = 'submission-status submission-error';
-                statusElement.innerHTML = `
-                    <strong>⚠️ Data saved locally (Submission failed)</strong><br>
-                    <small>${error.message}</small>
-                `;
-                
-                // Store data locally as fallback
-                localStorage.setItem('quizSubmission_' + studentData.studentId, JSON.stringify(studentData));
+                showSubmissionError(error);
             }
         }
 
         async function submitToGoogleAppsScript(data) {
+            const statusElement = document.getElementById('submission-status');
+            const debugElement = document.getElementById('debug-info');
+            
             try {
                 const submissionData = {
                     action: 'submitQuiz',
@@ -861,7 +629,17 @@
                     data: data
                 };
                 
-                console.log('Submitting to Google Apps Script:', submissionData);
+                console.log('Submitting data to Google Apps Script:', submissionData);
+                
+                // Show debug info
+                debugElement.style.display = 'block';
+                debugElement.innerHTML = `
+                    <strong>Debug Information:</strong><br>
+                    Submitting to: ${config.submitUrl}<br>
+                    Student ID: ${data.studentId}<br>
+                    Score: ${data.score}/${quizData.length}<br>
+                    Data size: ${JSON.stringify(submissionData).length} characters
+                `;
                 
                 const response = await fetch(config.submitUrl, {
                     method: 'POST',
@@ -871,34 +649,51 @@
                     body: JSON.stringify(submissionData)
                 });
                 
+                console.log('Response status:', response.status);
+                
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
                 const result = await response.json();
-                console.log('Google Apps Script response:', result);
-                return result;
+                console.log('Server response:', result);
+                
+                if (result.success) {
+                    statusElement.className = 'submission-status submission-success';
+                    statusElement.innerHTML = `
+                        <strong>✓ Data successfully saved to Google Sheets!</strong><br>
+                        <small>Submission ID: ${result.submissionId || 'N/A'}</small><br>
+                        <small>${result.message || 'Data recorded successfully'}</small>
+                    `;
+                    debugElement.innerHTML += `<br><br><strong>Success Response:</strong><br>${JSON.stringify(result, null, 2)}`;
+                } else {
+                    throw new Error(result.error || 'Unknown server error');
+                }
                 
             } catch (error) {
-                console.error('Error submitting to Google Apps Script:', error);
-                throw error;
+                console.error('Submission error:', error);
+                statusElement.className = 'submission-status submission-error';
+                statusElement.innerHTML = `
+                    <strong>⚠️ Failed to save to Google Sheets</strong><br>
+                    <small>Data saved locally as backup</small><br>
+                    <small>Error: ${error.message}</small>
+                `;
+                debugElement.innerHTML += `<br><br><strong>Error:</strong> ${error.message}`;
+                
+                // Save locally as backup
+                localStorage.setItem('quiz_backup_' + data.studentId, JSON.stringify(data));
+                console.log('Data saved locally as backup');
             }
         }
 
-        function terminateQuiz(reason) {
-            clearInterval(timerInterval);
-            
-            document.getElementById('quiz-section').innerHTML = `
-                <div class="error-message">
-                    <h2>Assessment Terminated</h2>
-                    <p>${reason}</p>
-                    <p>Your responses have been recorded with penalties.</p>
-                </div>
+        function showSubmissionError(error) {
+            const statusElement = document.getElementById('submission-status');
+            statusElement.className = 'submission-status submission-error';
+            statusElement.innerHTML = `
+                <strong>⚠️ Submission Error</strong><br>
+                <small>${error.message}</small><br>
+                <small>Your data has been saved locally.</small>
             `;
-            
-            studentData.terminated = true;
-            studentData.terminationReason = reason;
-            submitQuiz();
         }
 
         function generateStudentId() {
