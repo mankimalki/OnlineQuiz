@@ -1,0 +1,602 @@
+[
+  {
+    "question": "Which of the following is NOT a recognized energy store?",
+    "image": "",
+    "options": [
+      "Kinetic",
+      "Thermal",
+      "Frictional",
+      "Gravitational Potential"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Frictional is not an energy store - it's a force. The recognized energy stores are kinetic, thermal, chemical, gravitational potential, elastic potential, electrostatic, magnetic, and nuclear."
+  },
+  {
+    "question": "What is the net change in total energy for a closed system?",
+    "image": "",
+    "options": [
+      "It continuously increases",
+      "It continuously decreases",
+      "It is always zero",
+      "It depends on the energy transfers within the system"
+    ],
+    "correctAnswer": 2,
+    "explanation": "In a closed system, no energy can enter or leave, so the total energy remains constant - the net change is zero."
+  },
+  {
+    "question": "Energy is transferred from the Sun to the Earth primarily by:",
+    "image": "",
+    "options": [
+      "Heating",
+      "Radiation",
+      "Electricity",
+      "Mechanics"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The Sun's energy reaches Earth through electromagnetic radiation (light waves)."
+  },
+  {
+    "question": "According to the principle of conservation of energy, energy:",
+    "image": "",
+    "options": [
+      "Can be created but not destroyed",
+      "Can be destroyed but not created",
+      "Cannot be created or destroyed",
+      "Is always transferred usefully"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The conservation of energy principle states that energy cannot be created or destroyed, only transferred, stored, or dissipated."
+  },
+  {
+    "question": "What is the correct formula for kinetic energy?",
+    "image": "",
+    "options": [
+      "KE = m × v",
+      "KE = ½ × m × v²",
+      "KE = m × g × h",
+      "KE = m/v"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The kinetic energy formula is KE = ½ × m × v², where m is mass in kg and v is speed in m/s."
+  },
+  {
+    "question": "The formula for calculating gravitational potential energy (GPE) is:",
+    "image": "",
+    "options": [
+      "GPE = ½ × m × v²",
+      "GPE = m × g × h",
+      "GPE = F × d",
+      "GPE = m/g"
+    ],
+    "correctAnswer": 1,
+    "explanation": "GPE = m × g × h, where m is mass, g is gravitational field strength, and h is height."
+  },
+  {
+    "question": "A 1 kg mass is lifted 2 m vertically. The gain in GPE is: (g = 10 N/kg)",
+    "image": "",
+    "options": [
+      "2 J",
+      "5 J",
+      "20 J",
+      "50 J"
+    ],
+    "correctAnswer": 2,
+    "explanation": "GPE = m × g × h = 1 × 10 × 2 = 20 J"
+  },
+  {
+    "question": "For a falling object with no air resistance, the energy lost from the GPE store is:",
+    "image": "",
+    "options": [
+      "More than the energy gained in the kinetic store",
+      "Less than the energy gained in the kinetic store",
+      "Equal to the energy gained in the kinetic store",
+      "Transferred to the chemical store of the air"
+    ],
+    "correctAnswer": 2,
+    "explanation": "With no air resistance, all GPE lost is converted to kinetic energy gained due to conservation of energy."
+  },
+  {
+    "question": "A building with thick walls made of a material with low thermal conductivity will:",
+    "image": "",
+    "options": [
+      "Cool down very quickly",
+      "Heat up very quickly",
+      "Cool down very slowly",
+      "Have high energy bills"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Low thermal conductivity and thick walls reduce the rate of energy transfer, so the building cools slowly."
+  },
+  {
+    "question": "The main purpose of lubrication is to:",
+    "image": "",
+    "options": [
+      "Increase electrical conductivity",
+      "Reduce friction",
+      "Increase thermal conductivity",
+      "Create a chemical reaction"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Lubricants reduce friction between moving surfaces, decreasing energy dissipation to thermal stores."
+  },
+  {
+    "question": "The efficiency of a device is defined as:",
+    "image": "",
+    "options": [
+      "Total Energy Input / Useful Energy Output",
+      "Useful Energy Output / Total Energy Input",
+      "Wasted Energy / Total Energy Input",
+      "Total Energy Input / Wasted Energy"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Efficiency = (Useful Energy Output) ÷ (Total Energy Input)"
+  },
+  {
+    "question": "A lamp is supplied with 100 J of electrical energy. It outputs 10 J of light energy. What is its efficiency?",
+    "image": "",
+    "options": [
+      "0.01",
+      "0.1",
+      "1.0",
+      "10"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Efficiency = 10 J ÷ 100 J = 0.1"
+  },
+  {
+    "question": "In a Sankey diagram for an energy transfer, the thickness of an arrow represents:",
+    "image": "",
+    "options": [
+      "The cost of the energy",
+      "The amount of energy",
+      "The speed of the transfer",
+      "The temperature of the energy"
+    ],
+    "correctAnswer": 1,
+    "explanation": "In Sankey diagrams, arrow thickness is proportional to the amount of energy being transferred."
+  },
+  {
+    "question": "Which of the following is a non-renewable energy source?",
+    "image": "",
+    "options": [
+      "Wind",
+      "Solar",
+      "Natural Gas",
+      "Tidal"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Natural gas is a fossil fuel and non-renewable. Wind, solar, and tidal are renewable sources."
+  },
+  {
+    "question": "Which of these is a list of fossil fuels?",
+    "image": "",
+    "options": [
+      "Coal, Oil, Natural Gas",
+      "Uranium, Plutonium, Coal",
+      "Wood, Bio-fuel, Gas",
+      "Sun, Wind, Tides"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The three fossil fuels are coal, oil, and natural gas."
+  },
+  {
+    "question": "Electricity is generated from wind power by:",
+    "image": "",
+    "options": [
+      "Burning the wind",
+      "Using wind to turn a turbine connected to a generator",
+      "Using solar panels that work at night",
+      "Harnessing the chemical energy in the air"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Wind turns turbine blades, which rotate a generator to produce electricity."
+  },
+  {
+    "question": "A significant disadvantage of solar cells is that they:",
+    "image": "",
+    "options": [
+      "Produce large amounts of radioactive waste",
+      "Only generate electricity during the daytime",
+      "Cause significant noise pollution",
+      "Release greenhouse gases when operating"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Solar cells only work when sunlight is available, making them unreliable at night."
+  },
+  {
+    "question": "Hydro-electric power typically involves:",
+    "image": "",
+    "options": [
+      "Burning water to produce steam",
+      "Building a dam and using flowing water to turn turbines",
+      "Using the heat from deep underground",
+      "Harnessing the energy from atomic nuclei"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Hydro-electric power uses water stored behind a dam; when released, it flows through turbines."
+  },
+  {
+    "question": "Tidal barrages generate electricity using:",
+    "image": "",
+    "options": [
+      "The gravitational pull of the Sun and Moon on the oceans",
+      "The heat from the sun warming the sea",
+      "The kinetic energy of waves on the shore",
+      "Burning seaweed and other marine plants"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Tidal barrages harness the energy from tides caused by gravitational forces."
+  },
+  {
+    "question": "A key problem with burning fossil fuels is:",
+    "image": "",
+    "options": [
+      "They are carbon neutral",
+      "They release greenhouse gases like CO₂",
+      "They produce no waste products",
+      "They are available in unlimited quantities"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Burning fossil fuels releases CO₂, contributing to the greenhouse effect and global warming."
+  },
+  {
+    "question": "Which energy source does NOT produce CO₂ during electricity generation?",
+    "image": "",
+    "options": [
+      "Coal",
+      "Natural Gas",
+      "Nuclear",
+      "Oil"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Nuclear power doesn't produce CO₂ during operation (though there are emissions in fuel processing)."
+  },
+  {
+    "question": "What is the main environmental risk associated with nuclear power?",
+    "image": "",
+    "options": [
+      "Releasing sulfur dioxide and causing acid rain",
+      "The safe disposal of radioactive waste",
+      "Causing visual pollution and noise",
+      "Contributing directly to the greenhouse effect"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Radioactive waste remains dangerous for thousands of years and is difficult to store safely."
+  },
+  {
+    "question": "Which energy source is most likely to be used to power a calculator in a remote location?",
+    "image": "",
+    "options": [
+      "A large coal power station",
+      "A solar cell",
+      "A hydro-electric dam",
+      "A bio-fuel generator"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Solar cells are ideal for small devices in remote locations as they require no fuel and minimal maintenance."
+  },
+  {
+    "question": "A social factor that might limit the building of a new wind farm is:",
+    "image": "",
+    "options": [
+      "The high cost of the wind",
+      "Public complaints about visual impact and noise",
+      "The inability to generate electricity at night",
+      "The production of acid rain"
+    ],
+    "correctAnswer": 1,
+    "explanation": "People often object to wind farms due to their visual impact on landscapes and noise pollution."
+  },
+  {
+    "question": "An economic factor that can slow the switch to renewables is:",
+    "image": "",
+    "options": [
+      "Their high reliability",
+      "The low initial setup costs",
+      "The high initial investment required",
+      "The unlimited supply of fossil fuels"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Renewable energy infrastructure often requires high initial investment, which can be a barrier."
+  },
+  {
+    "question": "When a ball is thrown upwards (ignoring air resistance), at the highest point its kinetic energy store is zero. Where is the energy?",
+    "image": "",
+    "options": [
+      "It has been destroyed",
+      "It is entirely in its gravitational potential energy store",
+      "It has been transferred to the thermal store of the air",
+      "It is entirely in its chemical store"
+    ],
+    "correctAnswer": 1,
+    "explanation": "At the highest point, all kinetic energy has been converted to gravitational potential energy."
+  },
+  {
+    "question": "Dissipated energy is often stored in a less useful way, most commonly as:",
+    "image": "",
+    "options": [
+      "Kinetic energy",
+      "Gravitational potential energy",
+      "Thermal energy",
+      "Light energy"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Dissipated (wasted) energy usually ends up as thermal energy in the surroundings."
+  },
+  {
+    "question": "Which of the following is the best example of a closed system?",
+    "image": "",
+    "options": [
+      "A pan of boiling water on a hob",
+      "A car engine while driving",
+      "A mobile phone being used",
+      "Soup in a sealed thermos flask"
+    ],
+    "correctAnswer": 3,
+    "explanation": "A sealed thermos flask minimizes energy transfer to/from surroundings, approximating a closed system."
+  },
+  {
+    "question": "If the speed of a car doubles, its kinetic energy:",
+    "image": "",
+    "options": [
+      "Doubles",
+      "Triples",
+      "Quadruples",
+      "Stays the same"
+    ],
+    "correctAnswer": 2,
+    "explanation": "KE is proportional to v², so doubling speed quadruples kinetic energy (2² = 4)."
+  },
+  {
+    "question": "A motor has 60% efficiency. If it is supplied with 500 J of energy, how much energy is usefully transferred?",
+    "image": "",
+    "options": [
+      "60 J",
+      "300 J",
+      "400 J",
+      "500 J"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Useful energy = 60% of 500 J = 0.6 × 500 = 300 J"
+  },
+  {
+    "question": "Which method helps reduce unwanted energy transfer in buildings?",
+    "image": "",
+    "options": [
+      "Using thin metal walls",
+      "Installing cavity wall insulation",
+      "Painting walls dark colors",
+      "Using single-pane windows"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Cavity wall insulation traps air, which has low thermal conductivity, reducing energy loss."
+  },
+  {
+    "question": "What happens to wasted energy in a system?",
+    "image": "",
+    "options": [
+      "It is destroyed",
+      "It is created anew",
+      "It is transferred to less useful stores",
+      "It disappears completely"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Wasted energy is not destroyed but transferred to less useful stores, usually as thermal energy."
+  },
+  {
+    "question": "A ball rolling up a slope eventually stops because:",
+    "image": "",
+    "options": [
+      "Energy is destroyed by friction",
+      "Kinetic energy is transferred to gravitational potential and thermal energy",
+      "The ball runs out of energy",
+      "Gravity creates new energy"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Kinetic energy is transferred to GPE and to thermal energy stores due to friction."
+  },
+  {
+    "question": "Which renewable energy source uses animal dung or plant products?",
+    "image": "",
+    "options": [
+      "Solar power",
+      "Wind power",
+      "Bio-fuels",
+      "Hydro-electricity"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Bio-fuels are made from plant products or animal dung and can be burned like fossil fuels."
+  },
+  {
+    "question": "Why are fossil fuels considered non-renewable?",
+    "image": "",
+    "options": [
+      "They cause pollution",
+      "They take millions of years to form",
+      "They are expensive to extract",
+      "They are difficult to transport"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Fossil fuels form over millions of years, so they're used up much faster than they can be replaced."
+  },
+  {
+    "question": "What is the main advantage of renewable energy sources?",
+    "image": "",
+    "options": [
+      "They never run out",
+      "They are always cheaper",
+      "They have no environmental impact",
+      "They work in all weather conditions"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Renewable sources can be replenished as fast as they're used, so they won't run out."
+  },
+  {
+    "question": "How does double glazing reduce energy loss?",
+    "image": "",
+    "options": [
+      "By reflecting all light",
+      "By trapping a layer of insulating air",
+      "By generating electricity",
+      "By absorbing heat"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Double glazing has an air gap between glass panes, and air has low thermal conductivity."
+  },
+  {
+    "question": "What does the conservation of energy principle allow us to do?",
+    "image": "",
+    "options": [
+      "Create new energy when needed",
+      "Calculate energy transfers between stores",
+      "Destroy unwanted energy",
+      "Make devices 100% efficient"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Because energy is conserved, we can calculate how much is transferred between different stores."
+  },
+  {
+    "question": "Which energy store is involved when a spring is compressed?",
+    "image": "",
+    "options": [
+      "Kinetic energy",
+      "Thermal energy",
+      "Elastic potential energy",
+      "Chemical energy"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A compressed spring has energy in its elastic potential energy store."
+  },
+  {
+    "question": "Why can no device be 100% efficient?",
+    "image": "",
+    "options": [
+      "Energy is always destroyed",
+      "Some energy is always dissipated",
+      "The conservation of energy prevents it",
+      "Useful energy output exceeds input"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Some energy is always transferred to useless thermal energy stores through friction, etc."
+  },
+  {
+    "question": "What is the original source of energy for most renewable resources?",
+    "image": "",
+    "options": [
+      "The Earth's core",
+      "The Moon",
+      "The Sun",
+      "Fossil fuels"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Solar energy drives wind, hydro, bio-fuels, and direct solar power."
+  },
+  {
+    "question": "Which factor does NOT affect how quickly a building cools?",
+    "image": "",
+    "options": [
+      "Wall thickness",
+      "Thermal conductivity",
+      "Color of exterior paint",
+      "Presence of insulation"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Color affects heat absorption from sunlight but not the rate of cooling through conduction."
+  },
+  {
+    "question": "A machine wastes 200 J and has 800 J useful output. What is its efficiency?",
+    "image": "",
+    "options": [
+      "20%",
+      "25%",
+      "80%",
+      "400%"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Total input = 1000 J, useful output = 800 J, efficiency = 800/1000 = 0.8 = 80%"
+  },
+  {
+    "question": "Which energy transfer occurs in an electric kettle?",
+    "image": "",
+    "options": [
+      "Chemical to thermal",
+      "Electrical to thermal",
+      "Kinetic to electrical",
+      "Thermal to kinetic"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Electrical energy is transferred to thermal energy in the water."
+  },
+  {
+    "question": "What is the main disadvantage of nuclear power compared to fossil fuels?",
+    "image": "",
+    "options": [
+      "It produces greenhouse gases",
+      "It creates radioactive waste",
+      "It is less reliable",
+      "It is more expensive to fuel"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Radioactive waste requires safe storage for thousands of years, unlike fossil fuel waste."
+  },
+  {
+    "question": "How can the efficiency of a machine be improved?",
+    "image": "",
+    "options": [
+      "By increasing friction",
+      "By using lubrication",
+      "By making it heavier",
+      "By using thinner insulation"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Lubrication reduces friction, decreasing energy dissipation to thermal stores."
+  },
+  {
+    "question": "Which energy source is most reliable regardless of weather?",
+    "image": "",
+    "options": [
+      "Wind power",
+      "Solar power",
+      "Fossil fuels",
+      "Tidal power"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Fossil fuels can generate electricity continuously, unlike weather-dependent renewables."
+  },
+  {
+    "question": "What does a low thermal conductivity material do?",
+    "image": "",
+    "options": [
+      "Transfers heat quickly",
+      "Transfers heat slowly",
+      "Generates heat",
+      "Reflects all heat"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Low thermal conductivity means the material is a poor conductor of heat."
+  },
+  {
+    "question": "Why is energy dissipation a problem?",
+    "image": "",
+    "options": [
+      "It destroys energy",
+      "It makes devices less efficient",
+      "It creates new energy",
+      "It improves performance"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Dissipated energy is stored in less useful ways, reducing the efficiency of devices."
+  },
+  {
+    "question": "Which is an example of mechanical energy transfer?",
+    "image": "",
+    "options": [
+      "Heating a pan on a hob",
+      "A charge moving through a wire",
+      "A ball being thrown",
+      "Light from the Sun"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A ball being thrown involves a force moving an object - mechanical energy transfer."
+  }
+]

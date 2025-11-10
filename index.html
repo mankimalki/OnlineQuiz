@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Assessment Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Math fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Math&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Math&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .quiz-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
+        }
+        
+        .quiz-header {
+            background: #2c5aa0;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .security-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #856404;
+        }
+        
+        .quiz-content {
+            padding: 30px;
+        }
+        
+        .progress-container {
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #2c5aa0;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            text-align: right;
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .timer-container {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .timer {
+            font-size: 24px;
+            font-weight: 700;
+            color: #dc3545;
+        }
+        
+        .question-container {
+            margin-bottom: 25px;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .math-expression {
+            font-family: 'STIX Two Math', 'Noto Sans Math', serif;
+            font-size: 1.1em;
+            padding: 5px 0;
+            margin: 10px 0;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #2c5aa0;
+        }
+        
+        .math-symbol {
+            font-family: 'Noto Sans Symbols 2', sans-serif;
+        }
+        
+        .question-image {
+            max-width: 100%;
+            max-height: 300px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            border-color: #2c5aa0;
+            background: #f8f9fa;
+        }
+        
+        .option.selected {
+            border-color: #2c5aa0;
+            background: #e7f1ff;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-prev {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-next {
+            background: #2c5aa0;
+            color: white;
+        }
+        
+        .btn-submit {
+            background: #28a745;
+            color: white;
+        }
+        
+        .warning-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .warning-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            margin: 20px;
+        }
+        
+        .warning-count {
+            font-size: 48px;
+            font-weight: 700;
+            color: #dc3545;
+            margin: 20px 0;
+        }
+        
+        .completion-screen {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .completion-icon {
+            font-size: 64px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        
+        .completion-message {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #2c5aa0;
+        }
+        
+        .loading-container {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #2c5aa0;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .math-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .option-letter {
+            background: #2c5aa0;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .submission-status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .submission-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .submission-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .submission-loading {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Mathematics Assessment</h1>
+            <p>Academic Integrity Required</p>
+        </div>
+        
+        <div class="security-warning" id="security-warning">
+            ⚠️ This assessment is monitored. Any attempt to cheat will be recorded.
+        </div>
+        
+        <div class="quiz-content">
+            <div id="loading-container" class="loading-container">
+                <div class="spinner"></div>
+                <p>Loading assessment...</p>
+            </div>
+            
+            <div id="error-container" class="error-message" style="display: none;">
+                <p>Error loading assessment. Please try again later.</p>
+            </div>
+            
+            <div id="quiz-section" style="display: none;">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">Question 0 of 0</div>
+                </div>
+                
+                <div class="timer-container">
+                    <div>Time Remaining:</div>
+                    <div class="timer" id="timer">60</div>
+                </div>
+                
+                <div id="question-section">
+                    <div class="question-container">
+                        <div class="question-text" id="question-text"></div>
+                        <img id="question-image" class="question-image" style="display: none;">
+                        <div class="options-container" id="options-container"></div>
+                    </div>
+                    
+                    <div class="navigation">
+                        <button class="btn-prev" id="prev-btn" onclick="previousQuestion()">Previous</button>
+                        <button class="btn-next" id="next-btn" onclick="nextQuestion()">Next</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="completion-section" class="completion-screen" style="display: none;">
+                <div class="completion-icon">✓</div>
+                <div class="completion-message">Assessment Submitted Successfully!</div>
+                <p>Your responses have been recorded. Results will be available to your instructor.</p>
+                <div id="submission-status" class="submission-status submission-loading">
+                    <div class="spinner" style="width: 30px; height: 30px; border-width: 3px;"></div>
+                    <p>Submitting results to server...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="warning-modal" id="warning-modal">
+        <div class="warning-content">
+            <h2>Warning!</h2>
+            <p>Please return to the test window immediately.</p>
+            <div class="warning-count" id="warning-count">3</div>
+            <p>Multiple violations will result in test termination.</p>
+        </div>
+    </div>
+
+    <script>
+        // Quiz configuration
+        const config = {
+            // Google Apps Script Web App URL - YOUR SCRIPT URL INTEGRATED
+            submitUrl: 'https://script.google.com/macros/s/AKfycbwDx-OiARqTvBoV_oLM60BY9xBWce9mJX2TGPcWaiydSaqmQ9J1sYf1SwodGElqlcz0/exec',
+            
+            // Quiz settings
+            questionTime: 60, // seconds per question
+            maxCheatingAttempts: 5,
+            
+            // URLs
+            questionsUrl: 'questions.json'
+        };
+
+        // Quiz state
+        let quizData = [];
+        let currentQuestion = 0;
+        let studentData = {
+            studentId: generateStudentId(),
+            studentName: "Anonymous Student",
+            quizType: "Mathematics Assessment",
+            startTime: new Date(),
+            answers: [],
+            timePerQuestion: [],
+            windowFocusLost: 0,
+            tabSwitches: 0,
+            cheatingAttempts: 0
+        };
+        
+        // Timer variables
+        let timeLeft = config.questionTime;
+        let timerInterval;
+        let questionStartTime;
+
+        // Anti-cheating monitoring
+        let windowFocusLost = 0;
+        let tabSwitches = 0;
+        let cheatingAttempts = 0;
+
+        // Initialize quiz
+        async function initQuiz() {
+            try {
+                // Load questions from JSON
+                await loadQuestions();
+                
+                // Hide loading, show quiz
+                document.getElementById('loading-container').style.display = 'none';
+                document.getElementById('quiz-section').style.display = 'block';
+                
+                // Initialize anti-cheating
+                setupAntiCheating();
+                
+                // Start with first question
+                showQuestion();
+                
+                // Record start time
+                studentData.startTime = new Date();
+                
+            } catch (error) {
+                console.error('Error initializing quiz:', error);
+                document.getElementById('loading-container').style.display = 'none';
+                document.getElementById('error-container').style.display = 'block';
+            }
+        }
+
+        // Load questions from JSON file
+        async function loadQuestions() {
+            try {
+                const response = await fetch(config.questionsUrl);
+                if (!response.ok) {
+                    throw new Error('Failed to load questions');
+                }
+                quizData = await response.json();
+                
+                // Initialize student answers array
+                studentData.answers = new Array(quizData.length).fill(null);
+                studentData.timePerQuestion = new Array(quizData.length).fill(0);
+                
+            } catch (error) {
+                console.error('Error loading questions:', error);
+                // Fallback to sample questions if JSON fails
+                console.log('Using fallback questions');
+                quizData = getFallbackQuestions();
+                studentData.answers = new Array(quizData.length).fill(null);
+                studentData.timePerQuestion = new Array(quizData.length).fill(0);
+            }
+        }
+
+        // Fallback questions if JSON fails to load
+        function getFallbackQuestions() {
+            return [
+                {
+                    "question": "Solve the following equation for x:",
+                    "mathExpression": "2x + 5 = 13",
+                    "options": ["x = 4", "x = 5", "x = 6", "x = 7"],
+                    "correctAnswer": 0
+                },
+                {
+                    "question": "What is the value of the following expression?",
+                    "mathExpression": "∫<sub>0</sub><sup>1</sup> x² dx",
+                    "options": ["1/2", "1/3", "1/4", "1/5"],
+                    "correctAnswer": 1
+                },
+                {
+                    "question": "Simplify the following expression:",
+                    "mathExpression": "√(16) + ∛(27)",
+                    "options": ["5", "6", "7", "8"],
+                    "correctAnswer": 2
+                },
+                {
+                    "question": "What is the derivative of f(x) = 3x³ - 2x² + 5x - 7?",
+                    "mathExpression": "",
+                    "options": ["9x² - 4x + 5", "6x² - 4x + 5", "9x² - 2x + 5", "6x² - 2x + 5"],
+                    "correctAnswer": 0
+                },
+                {
+                    "question": "Solve the quadratic equation:",
+                    "mathExpression": "x² - 5x + 6 = 0",
+                    "options": ["x = 2, x = 3", "x = 1, x = 6", "x = -2, x = -3", "x = -1, x = -6"],
+                    "correctAnswer": 0
+                },
+                {
+                    "question": "What is the value of π (pi) rounded to two decimal places?",
+                    "mathExpression": "",
+                    "options": ["3.14", "3.15", "3.16", "3.17"],
+                    "correctAnswer": 0
+                },
+                {
+                    "question": "Calculate the area of a circle with radius 5:",
+                    "mathExpression": "A = πr²",
+                    "options": ["25π", "50π", "75π", "100π"],
+                    "correctAnswer": 0
+                },
+                {
+                    "question": "What is the solution to the system of equations?",
+                    "mathExpression": "2x + y = 7<br>x - y = 2",
+                    "options": ["x = 3, y = 1", "x = 2, y = 3", "x = 4, y = -1", "x = 1, y = 5"],
+                    "correctAnswer": 0
+                },
+                {
+                    "question": "Evaluate the limit:",
+                    "mathExpression": "lim<sub>x→2</sub> (x² - 4)/(x - 2)",
+                    "options": ["0", "2", "4", "Undefined"],
+                    "correctAnswer": 2
+                },
+                {
+                    "question": "What is the probability of rolling a 6 on a fair die?",
+                    "mathExpression": "",
+                    "options": ["1/6", "1/3", "1/2", "5/6"],
+                    "correctAnswer": 0
+                }
+            ];
+        }
+
+        // Anti-cheating measures
+        function setupAntiCheating() {
+            // Page visibility API
+            let visibilityStartTime = null;
+            
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    visibilityStartTime = new Date();
+                } else if (visibilityStartTime) {
+                    const timeAway = (new Date() - visibilityStartTime) / 1000;
+                    if (timeAway > 2) {
+                        tabSwitches++;
+                        studentData.tabSwitches = tabSwitches;
+                        cheatingAttempts++;
+                        studentData.cheatingAttempts = cheatingAttempts;
+                        showWarning();
+                        
+                        if (cheatingAttempts >= config.maxCheatingAttempts) {
+                            terminateQuiz("Too many cheating attempts detected");
+                        }
+                    }
+                    visibilityStartTime = null;
+                }
+            });
+
+            // Window focus/blur
+            let focusStartTime = null;
+            
+            window.addEventListener('blur', function() {
+                focusStartTime = new Date();
+            });
+            
+            window.addEventListener('focus', function() {
+                if (focusStartTime) {
+                    const timeAway = (new Date() - focusStartTime) / 1000;
+                    if (timeAway > 2) {
+                        windowFocusLost++;
+                        studentData.windowFocusLost = windowFocusLost;
+                        cheatingAttempts++;
+                        studentData.cheatingAttempts = cheatingAttempts;
+                        showWarning();
+                        
+                        if (cheatingAttempts >= config.maxCheatingAttempts) {
+                            terminateQuiz("Too many cheating attempts detected");
+                        }
+                    }
+                    focusStartTime = null;
+                }
+            });
+
+            // Disable right-click
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                cheatingAttempts++;
+                studentData.cheatingAttempts = cheatingAttempts;
+                showWarning();
+                return false;
+            });
+
+            // Disable keyboard shortcuts for dev tools
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && (e.key === 'u' || e.key === 'U')) ||
+                    (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I' || e.key === 'j' || e.key === 'J' || e.key === 'c' || e.key === 'C'))) {
+                    e.preventDefault();
+                    cheatingAttempts++;
+                    studentData.cheatingAttempts = cheatingAttempts;
+                    showWarning();
+                    return false;
+                }
+            });
+        }
+
+        function showWarning() {
+            const modal = document.getElementById('warning-modal');
+            const count = document.getElementById('warning-count');
+            let warningTime = 3;
+            
+            modal.style.display = 'flex';
+            count.textContent = warningTime;
+            
+            const countdown = setInterval(() => {
+                warningTime--;
+                count.textContent = warningTime;
+                
+                if (warningTime <= 0) {
+                    clearInterval(countdown);
+                    modal.style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timeLeft = config.questionTime;
+            updateTimerDisplay();
+            
+            questionStartTime = new Date();
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    nextQuestion();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timer').textContent = timeLeft;
+            
+            if (timeLeft < 10) {
+                document.getElementById('timer').style.color = '#dc3545';
+            } else if (timeLeft < 30) {
+                document.getElementById('timer').style.color = '#fd7e14';
+            }
+        }
+
+        function showQuestion() {
+            const question = quizData[currentQuestion];
+            document.getElementById('question-text').innerHTML = question.question;
+            
+            const questionText = document.getElementById('question-text');
+            if (question.mathExpression) {
+                const mathElement = document.createElement('div');
+                mathElement.className = 'math-expression';
+                mathElement.innerHTML = question.mathExpression;
+                questionText.appendChild(mathElement);
+            }
+            
+            const questionImage = document.getElementById('question-image');
+            if (question.image) {
+                questionImage.src = question.image;
+                questionImage.style.display = 'block';
+            } else {
+                questionImage.style.display = 'none';
+            }
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            const optionLetters = ['A', 'B', 'C', 'D'];
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                if (studentData.answers[currentQuestion] === index) {
+                    optionElement.classList.add('selected');
+                }
+                
+                if (option.includes('π') || option.includes('∫') || option.includes('√') || option.includes('lim') || option.includes('x =')) {
+                    const optionContent = document.createElement('div');
+                    optionContent.className = 'math-option';
+                    
+                    const letterSpan = document.createElement('span');
+                    letterSpan.className = 'option-letter';
+                    letterSpan.textContent = optionLetters[index];
+                    
+                    const textSpan = document.createElement('span');
+                    textSpan.className = 'math-expression';
+                    textSpan.innerHTML = option;
+                    
+                    optionContent.appendChild(letterSpan);
+                    optionContent.appendChild(textSpan);
+                    optionElement.appendChild(optionContent);
+                } else {
+                    const optionContent = document.createElement('div');
+                    optionContent.className = 'math-option';
+                    
+                    const letterSpan = document.createElement('span');
+                    letterSpan.className = 'option-letter';
+                    letterSpan.textContent = optionLetters[index];
+                    
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = option;
+                    
+                    optionContent.appendChild(letterSpan);
+                    optionContent.appendChild(textSpan);
+                    optionElement.appendChild(optionContent);
+                }
+                
+                optionElement.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            updateProgress();
+            updateNavigation();
+            startTimer();
+        }
+
+        function selectAnswer(answerIndex) {
+            const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
+            studentData.timePerQuestion[currentQuestion] = timeSpent;
+            
+            studentData.answers[currentQuestion] = answerIndex;
+            
+            const options = document.querySelectorAll('.option');
+            options.forEach((option, index) => {
+                if (index === answerIndex) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            document.getElementById('progress-text').textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            
+            if (currentQuestion === 0) {
+                prevBtn.disabled = true;
+                prevBtn.style.opacity = '0.5';
+                prevBtn.style.cursor = 'not-allowed';
+            } else {
+                prevBtn.disabled = false;
+                prevBtn.style.opacity = '1';
+                prevBtn.style.cursor = 'pointer';
+            }
+            
+            if (currentQuestion === quizData.length - 1) {
+                nextBtn.textContent = 'Submit';
+                nextBtn.className = 'btn-submit';
+            } else {
+                nextBtn.textContent = 'Next';
+                nextBtn.className = 'btn-next';
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
+                studentData.timePerQuestion[currentQuestion] = timeSpent;
+                
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
+            studentData.timePerQuestion[currentQuestion] = timeSpent;
+            
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                submitQuiz();
+            }
+        }
+
+        async function submitQuiz() {
+            try {
+                const endTime = new Date();
+                studentData.endTime = endTime;
+                studentData.totalTime = Math.round((endTime - studentData.startTime) / 1000);
+                
+                let score = 0;
+                quizData.forEach((question, index) => {
+                    if (studentData.answers[index] === question.correctAnswer) {
+                        score++;
+                    }
+                });
+                
+                const totalDeductions = (tabSwitches + cheatingAttempts) * 2;
+                let finalScore = score - totalDeductions;
+                if (finalScore < 0) finalScore = 0;
+                
+                studentData.score = score;
+                studentData.finalScore = finalScore;
+                studentData.totalDeductions = totalDeductions;
+                studentData.percentage = Math.round((finalScore / quizData.length) * 100);
+                
+                // Show completion screen immediately
+                document.getElementById('quiz-section').style.display = 'none';
+                document.getElementById('completion-section').style.display = 'block';
+                
+                // Submit to Google Apps Script
+                const submissionResult = await submitToGoogleAppsScript(studentData);
+                
+                // Update submission status
+                const statusElement = document.getElementById('submission-status');
+                statusElement.innerHTML = ''; // Clear loading spinner
+                
+                if (submissionResult.success) {
+                    statusElement.className = 'submission-status submission-success';
+                    statusElement.innerHTML = `
+                        <strong>✓ Data successfully saved to Google Sheets</strong><br>
+                        <small>Submission ID: ${submissionResult.submissionId || 'N/A'}</small>
+                        <br><small>Message: ${submissionResult.message || 'Success'}</small>
+                    `;
+                } else {
+                    statusElement.className = 'submission-status submission-error';
+                    statusElement.innerHTML = `
+                        <strong>⚠️ Data saved locally (Google Sheets submission failed)</strong><br>
+                        <small>${submissionResult.error || 'Unknown error'}</small>
+                    `;
+                    // Store data locally as fallback
+                    localStorage.setItem('quizSubmission_' + studentData.studentId, JSON.stringify(studentData));
+                }
+                
+            } catch (error) {
+                console.error('Error submitting quiz:', error);
+                document.getElementById('quiz-section').style.display = 'none';
+                document.getElementById('completion-section').style.display = 'block';
+                
+                const statusElement = document.getElementById('submission-status');
+                statusElement.innerHTML = ''; // Clear loading spinner
+                statusElement.className = 'submission-status submission-error';
+                statusElement.innerHTML = `
+                    <strong>⚠️ Data saved locally (Submission failed)</strong><br>
+                    <small>${error.message}</small>
+                `;
+                
+                // Store data locally as fallback
+                localStorage.setItem('quizSubmission_' + studentData.studentId, JSON.stringify(studentData));
+            }
+        }
+
+        async function submitToGoogleAppsScript(data) {
+            try {
+                const submissionData = {
+                    action: 'submitQuiz',
+                    timestamp: new Date().toISOString(),
+                    data: data
+                };
+                
+                console.log('Submitting to Google Apps Script:', submissionData);
+                
+                const response = await fetch(config.submitUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(submissionData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('Google Apps Script response:', result);
+                return result;
+                
+            } catch (error) {
+                console.error('Error submitting to Google Apps Script:', error);
+                throw error;
+            }
+        }
+
+        function terminateQuiz(reason) {
+            clearInterval(timerInterval);
+            
+            document.getElementById('quiz-section').innerHTML = `
+                <div class="error-message">
+                    <h2>Assessment Terminated</h2>
+                    <p>${reason}</p>
+                    <p>Your responses have been recorded with penalties.</p>
+                </div>
+            `;
+            
+            studentData.terminated = true;
+            studentData.terminationReason = reason;
+            submitQuiz();
+        }
+
+        function generateStudentId() {
+            return 'S' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        }
+
+        // Initialize when page loads
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>

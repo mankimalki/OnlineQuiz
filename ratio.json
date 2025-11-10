@@ -1,0 +1,84 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "A bag contains red and blue balls in a ratio of 2:1 (red:blue). What fraction of the balls are blue?",
+      "options": ["1/2", "1/3", "2/3", "1/4"],
+      "correctAnswer": 1,
+      "explanation": "The ratio 2:1 means for every 3 balls, 1 is blue. So the fraction is 1/3.",
+      "image": null
+    },
+    {
+      "id": 2,
+      "question": "Clive paints 3 pictures every 2 hours. How long will it take him to paint 24 pictures?",
+      "options": ["12 hours", "16 hours", "18 hours", "20 hours"],
+      "correctAnswer": 1,
+      "explanation": "3 pictures in 2 hours means 1 picture in 2/3 hour. For 24 pictures: 24 × (2/3) = 16 hours.",
+      "image": null
+    },
+    {
+      "id": 3,
+      "question": "If 1 in every 9 cars driving by is red, and 8 red cars drive by, how many cars drove by in total?",
+      "options": ["64", "72", "81", "90"],
+      "correctAnswer": 1,
+      "explanation": "If 1 in 9 cars is red, then for 8 red cars, total cars = 8 × 9 = 72.",
+      "image": null
+    },
+    {
+      "id": 4,
+      "question": "A farmer uses 45 kg of hay to feed 5 horses for one day. How many kilograms of hay are needed to feed 8 horses for one day?",
+      "options": ["60 kg", "64 kg", "72 kg", "80 kg"],
+      "correctAnswer": 2,
+      "explanation": "5 horses need 45 kg, so 1 horse needs 45/5 = 9 kg. For 8 horses: 8 × 9 = 72 kg.",
+      "image": null
+    },
+    {
+      "id": 5,
+      "question": "If 8 copies of a magazine cost £16.40, how much will 3 copies cost?",
+      "options": ["£5.80", "£6.15", "£6.50", "£6.85"],
+      "correctAnswer": 1,
+      "explanation": "8 copies cost £16.40, so 1 copy costs £16.40/8 = £2.05. For 3 copies: 3 × £2.05 = £6.15.",
+      "image": null
+    },
+    {
+      "id": 6,
+      "question": "A recipe requires flour, sugar, and butter in the ratio 100 g : 100 g : 80 g. If 120 g of butter is used, what total weight of flour and sugar should be used?",
+      "options": ["200 g", "240 g", "260 g", "300 g"],
+      "correctAnswer": 3,
+      "explanation": "Butter ratio is 80g, but we have 120g which is 1.5 times more. So flour and sugar should also be 1.5 times: (100+100) × 1.5 = 300g.",
+      "image": null
+    },
+    {
+      "id": 7,
+      "question": "Divide 48 in the ratio 3:1.",
+      "options": ["30:18", "32:16", "36:12", "40:8"],
+      "correctAnswer": 2,
+      "explanation": "Ratio 3:1 means 3+1=4 parts. Each part is 48/4=12. So the parts are 3×12=36 and 1×12=12.",
+      "image": null
+    },
+    {
+      "id": 8,
+      "question": "Divide £490 in the ratio 4:3.",
+      "options": ["£260:£230", "£270:£220", "£280:£210", "£300:£190"],
+      "correctAnswer": 2,
+      "explanation": "Ratio 4:3 means 4+3=7 parts. Each part is £490/7=£70. So the parts are 4×70=£280 and 3×70=£210.",
+      "image": null
+    },
+    {
+      "id": 9,
+      "question": "Game cards are shared between Tomas and Matthew in the ratio 5:4. If Matthew receives 16 cards, how many does Tomas receive?",
+      "options": ["18", "20", "22", "24"],
+      "correctAnswer": 1,
+      "explanation": "Matthew's share is 4 parts = 16 cards, so 1 part = 4 cards. Tomas has 5 parts = 5×4=20 cards.",
+      "image": null
+    },
+    {
+      "id": 10,
+      "question": "A bag contains 84 blocks. If the ratio of green to blue blocks is 5:2, how many green blocks are there?",
+      "options": ["50", "55", "60", "65"],
+      "correctAnswer": 2,
+      "explanation": "Ratio 5:2 means 5+2=7 parts. Each part is 84/7=12. Green blocks are 5 parts = 5×12=60.",
+      "image": null
+    }
+  ]
+}

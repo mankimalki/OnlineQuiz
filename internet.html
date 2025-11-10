@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ratio & Proportion Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #eef2ff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: white;
+            color: var(--gray-900);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            width: 100%;
+        }
+        
+        header {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--gray-200);
+            background-color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .timer-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .timer {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .timer.warning {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+        
+        .timer.danger {
+            background-color: #fef2f2;
+            color: var(--error);
+        }
+        
+        main {
+            flex: 1;
+            padding: 2rem 0;
+        }
+        
+        .intro-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+        
+        .intro-section h2 {
+            font-size: 1.875rem;
+            color: var(--gray-900);
+        }
+        
+        .intro-section p {
+            font-size: 1.125rem;
+            color: var(--gray-700);
+            max-width: 600px;
+        }
+        
+        .quiz-section, .results-section, .review-section {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .quiz-section.active, .results-section.active, .review-section.active {
+            display: flex; /* Shown when active */
+        }
+        
+        .progress-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .progress-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: var(--gray-200);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 9999px;
+            transition: width 0.3s ease;
+        }
+        
+        .question-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .question-dot {
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        
+        .question-dot:hover:not(.current) {
+            background-color: var(--gray-200);
+        }
+        
+        .question-dot.current {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .question-dot.answered {
+            background-color: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+        
+        .question-dot.skipped {
+            background-color: var(--warning);
+            color: white;
+            border-color: var(--warning);
+        }
+        
+        .question-dot.incorrect {
+            background-color: var(--error);
+            color: white;
+            border-color: var(--error);
+        }
+        
+        .question-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .option {
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .option:hover {
+            background-color: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+        
+        .option.selected {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+        
+        .option.correct {
+            background-color: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+        
+        .option.incorrect {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+        
+        .option-circle {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            border: 2px solid var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .option.selected .option-circle {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: white;
+        }
+        
+         .option.correct .option-circle, .option.correct .option-circle::after {
+            border-color: #10b981;
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .option.incorrect .option-circle, .option.incorrect .option-circle::after {
+            border-color: #ef4444;
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .option-text {
+            flex: 1;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            background-color: var(--gray-100);
+            color: var(--gray-700);
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background-color: var(--gray-200);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background-color: #4338ca;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover:not(:disabled) {
+            background-color: #0d9668;
+        }
+        
+        .btn-error {
+            background-color: var(--error);
+            color: white;
+        }
+        
+        .btn-error:hover:not(:disabled) {
+            background-color: #dc2626;
+        }
+        
+        .results-header {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .score-container {
+            background-color: var(--primary-light);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .score-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        
+        .score-text {
+            font-size: 1.125rem;
+            color: var(--gray-700);
+        }
+        
+        .results-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .review-item {
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--gray-200);
+        }
+        
+        .review-item.correct {
+            background-color: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+        
+        .review-item.incorrect {
+            background-color: #fef2f2;
+            border-color: #fecaca;
+        }
+        
+        .review-question {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .review-answer {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .review-explanation {
+            padding: 1rem;
+            background-color: white;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-correct {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-incorrect {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .status-skipped {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .question-container {
+                padding: 1.5rem;
+            }
+            
+            .question-dot {
+                width: 2.25rem;
+                height: 2.25rem;
+            }
+            
+            .results-actions {
+                flex-direction: column;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .navigation > div {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>Ratio & Proportion Quiz</h1>
+                <div class="timer-container">
+                    <span>Time Left:</span>
+                    <div class="timer" id="timer">40s</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <!-- Intro Section -->
+        <section class="intro-section" id="intro-section">
+            <h2>Ratio & Proportion Quiz</h2>
+            <p>Test your knowledge of ratios and proportions. You will have 40 seconds per question. Good luck!</p>
+            <button class="btn btn-primary" id="start-btn">
+                <span>Start Quiz</span>
+            </button>
+        </section>
+        
+        <!-- Quiz Section -->
+        <section class="quiz-section" id="quiz-section">
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span class="progress-label" id="progress-text">Question 1 of 20</span>
+                    <span class="progress-label" id="time-text">40s remaining</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 5%"></div>
+                </div>
+            </div>
+            
+            <div class="question-nav" id="question-nav">
+                <!-- Question dots will be generated here -->
+            </div>
+            
+            <div class="question-container">
+                <div class="question-text" id="question-text">
+                    <!-- Question text will be inserted here -->
+                </div>
+                
+                <div class="options-container" id="options-container">
+                    <!-- Options will be generated here -->
+                </div>
+                
+                <div class="navigation">
+                    <div>
+                        <button class="btn btn-secondary" id="prev-btn" disabled>
+                            <span>Previous Question</span>
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-secondary" id="skip-btn">
+                            <span>Skip Question</span>
+                        </button>
+                        <button class="btn btn-primary" id="next-btn" disabled>
+                            <span>Submit Answer</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Results Section -->
+        <section class="results-section" id="results-section">
+            <div class="results-header">
+                <h2>Quiz Completed!</h2>
+                <p>You've finished the Ratio & Proportion Quiz</p>
+            </div>
+            
+            <div class="score-container">
+                <div class="score-value" id="score-value">0/20</div>
+                <div class="score-text" id="score-text">Your Score</div>
+            </div>
+            
+            <div class="results-actions">
+                <button class="btn btn-secondary" id="restart-btn">
+                    <span>Restart Quiz</span>
+                </button>
+                <button class="btn btn-primary" id="review-btn">
+                    <span>Review Answers</span>
+                </button>
+            </div>
+        </section>
+        
+        <!-- Review Section -->
+        <section class="review-section" id="review-section">
+            <div class="results-header">
+                <h2>Answer Review</h2>
+                <p>Review your answers and explanations</p>
+            </div>
+            
+            <div id="review-questions">
+                <!-- Review questions will be generated here -->
+            </div>
+            
+            <div class="results-actions">
+                <button class="btn btn-secondary" id="back-to-results-btn">
+                    <span>Back to Results</span>
+                </button>
+                <button class="btn btn-primary" id="restart-from-review-btn">
+                    <span>Restart Quiz</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Questions data
+        const quizQuestions = [
+            {
+                "id": 1,
+                "question": "A bag contains red and blue balls in a ratio of 2:1 (red:blue). What fraction of the balls are blue?",
+                "options": ["1/2", "1/3", "2/3", "1/4"],
+                "correctAnswer": 1,
+                "explanation": "The ratio 2:1 means for every 3 balls, 1 is blue. So the fraction is 1/3."
+            },
+            {
+                "id": 2,
+                "question": "Clive paints 3 pictures every 2 hours. How long will it take him to paint 24 pictures?",
+                "options": ["12 hours", "16 hours", "18 hours", "20 hours"],
+                "correctAnswer": 1,
+                "explanation": "3 pictures in 2 hours means 1 picture in 2/3 hour. For 24 pictures: 24 × (2/3) = 16 hours."
+            },
+            {
+                "id": 3,
+                "question": "If 1 in every 9 cars driving by is red, and 8 red cars drive by, how many cars drove by in total?",
+                "options": ["64", "72", "81", "90"],
+                "correctAnswer": 1,
+                "explanation": "If 1 in 9 cars is red, then for 8 red cars, total cars = 8 × 9 = 72."
+            },
+            {
+                "id": 4,
+                "question": "A farmer uses 45 kg of hay to feed 5 horses for one day. How many kilograms of hay are needed to feed 8 horses for one day?",
+                "options": ["60 kg", "64 kg", "72 kg", "80 kg"],
+                "correctAnswer": 2,
+                "explanation": "5 horses need 45 kg, so 1 horse needs 45/5 = 9 kg. For 8 horses: 8 × 9 = 72 kg."
+            },
+            {
+                "id": 5,
+                "question": "If 8 copies of a magazine cost £16.40, how much will 3 copies cost?",
+                "options": ["£5.80", "£6.15", "£6.50", "£6.85"],
+                "correctAnswer": 1,
+                "explanation": "8 copies cost £16.40, so 1 copy costs £16.40/8 = £2.05. For 3 copies: 3 × £2.05 = £6.15."
+            },
+            {
+                "id": 6,
+                "question": "A recipe requires flour, sugar, and butter in the ratio 100 g : 100 g : 80 g. If 120 g of butter is used, what total weight of flour and sugar should be used?",
+                "options": ["200 g", "240 g", "260 g", "300 g"],
+                "correctAnswer": 3,
+                "explanation": "Butter ratio is 80g, but we have 120g which is 1.5 times more. So flour and sugar should also be 1.5 times: (100+100) × 1.5 = 300g."
+            },
+            {
+                "id": 7,
+                "question": "Divide 48 in the ratio 3:1.",
+                "options": ["30:18", "32:16", "36:12", "40:8"],
+                "correctAnswer": 2,
+                "explanation": "Ratio 3:1 means 3+1=4 parts. Each part is 48/4=12. So the parts are 3×12=36 and 1×12=12."
+            },
+            {
+                "id": 8,
+                "question": "Divide £490 in the ratio 4:3.",
+                "options": ["£260:£230", "£270:£220", "£280:£210", "£300:£190"],
+                "correctAnswer": 2,
+                "explanation": "Ratio 4:3 means 4+3=7 parts. Each part is £490/7=£70. So the parts are 4×70=£280 and 3×70=£210."
+            },
+            {
+                "id": 9,
+                "question": "Game cards are shared between Tomas and Matthew in the ratio 5:4. If Matthew receives 16 cards, how many does Tomas receive?",
+                "options": ["18", "20", "22", "24"],
+                "correctAnswer": 1,
+                "explanation": "Matthew's share is 4 parts = 16 cards, so 1 part = 4 cards. Tomas has 5 parts = 5×4=20 cards."
+            },
+            {
+                "id": 10,
+                "question": "A bag contains 84 blocks. If the ratio of green to blue blocks is 5:2, how many green blocks are there?",
+                "options": ["50", "55", "60", "65"],
+                "correctAnswer": 2,
+                "explanation": "Ratio 5:2 means 5+2=7 parts. Each part is 84/7=12. Green blocks are 5 parts = 5×12=60."
+            },
+            {
+                "id": 11,
+                "question": "The ratio of boys to girls in a class is 3:4. If there are 12 boys, how many girls are there?",
+                "options": ["14", "15", "16", "18"],
+                "correctAnswer": 2,
+                "explanation": "The ratio 3:4 means for every 3 boys there are 4 girls. If there are 12 boys (3×4), there are 4×4 = 16 girls."
+            },
+            {
+                "id": 12,
+                "question": "A car travels 150 km using 10 liters of fuel. How far can it travel with 15 liters of fuel?",
+                "options": ["200 km", "225 km", "250 km", "275 km"],
+                "correctAnswer": 1,
+                "explanation": "The car travels 150/10 = 15 km per liter. With 15 liters, it can travel 15×15 = 225 km."
+            },
+            {
+                "id": 13,
+                "question": "The scale of a map is 1 cm : 5 km. If two towns are 25 km apart, how far apart are they on the map?",
+                "options": ["3 cm", "4 cm", "5 cm", "6 cm"],
+                "correctAnswer": 2,
+                "explanation": "The scale is 1 cm represents 5 km. For 25 km, the distance on the map is 25/5 = 5 cm."
+            },
+            {
+                "id": 14,
+                "question": "In a fruit salad, the ratio of apples to oranges is 3:2. If there are 15 apples, how many fruits are there in total?",
+                "options": ["20", "25", "30", "35"],
+                "correctAnswer": 1,
+                "explanation": "The ratio 3:2 means for every 3 apples there are 2 oranges. If there are 15 apples (3×5), there are 2×5 = 10 oranges. Total = 15 + 10 = 25."
+            },
+            {
+                "id": 15,
+                "question": "A mixture contains orange juice and water in the ratio 4:1. If the mixture contains 800 ml of orange juice, how much water is there?",
+                "options": ["100 ml", "150 ml", "200 ml", "250 ml"],
+                "correctAnswer": 2,
+                "explanation": "The ratio 4:1 means for every 4 parts of orange juice there is 1 part of water. If there are 800 ml of orange juice (4×200), there is 1×200 = 200 ml of water."
+            },
+            {
+                "id": 16,
+                "question": "The ratio of red sweets to green sweets is 3:7. If there are 21 red sweets, how many green sweets are there?",
+                "options": ["42", "49", "56", "63"],
+                "correctAnswer": 1,
+                "explanation": "The ratio 3:7 means for every 3 red sweets there are 7 green sweets. If there are 21 red sweets (3×7), there are 7×7 = 49 green sweets."
+            },
+            {
+                "id": 17,
+                "question": "If 5 pens cost $3.50, how much do 8 pens cost?",
+                "options": ["$5.20", "$5.40", "$5.60", "$5.80"],
+                "correctAnswer": 2,
+                "explanation": "5 pens cost $3.50, so 1 pen costs $3.50/5 = $0.70. For 8 pens: 8 × $0.70 = $5.60."
+            },
+            {
+                "id": 18,
+                "question": "A recipe for 6 people uses 180 g of flour. How much flour is needed for 10 people?",
+                "options": ["280 g", "300 g", "320 g", "340 g"],
+                "correctAnswer": 1,
+                "explanation": "6 people need 180 g, so 1 person needs 180/6 = 30 g. For 10 people: 10 × 30 = 300 g."
+            },
+            {
+                "id": 19,
+                "question": "The ratio of the angles in a triangle is 2:3:4. What is the size of the largest angle?",
+                "options": ["60°", "70°", "80°", "90°"],
+                "correctAnswer": 2,
+                "explanation": "The ratio 2:3:4 means 2+3+4=9 parts. The sum of angles in a triangle is 180°. Each part is 180/9=20°. The largest angle is 4 parts = 4×20°=80°."
+            },
+            {
+                "id": 20,
+                "question": "A shop sells oranges and apples in the ratio 5:3. If the shop has 45 oranges, how many fruits are there in total?",
+                "options": ["60", "65", "70", "72"],
+                "correctAnswer": 3,
+                "explanation": "The ratio 5:3 means for every 5 oranges there are 3 apples. If there are 45 oranges (5×9), there are 3×9 = 27 apples. Total = 45 + 27 = 72."
+            }
+        ];
+
+        // Constants
+        const TIME_PER_QUESTION = 40; // seconds
+        const QUIZ_STATE_KEY = 'ratio_proportion_quiz_state';
+        const COMPLETED_QUESTIONS_KEY = 'completed_questions';
+        const TOTAL_QUESTIONS_PER_QUIZ = 20;
+
+        // Quiz state
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(TOTAL_QUESTIONS_PER_QUIZ).fill(null);
+        let timer;
+        let timeLeft = TIME_PER_QUESTION;
+        let quizCompleted = false;
+        let shuffledQuestions = []; // Array to hold the shuffled questions
+
+        // DOM elements
+        const introSection = document.getElementById('intro-section');
+        const quizSection = document.getElementById('quiz-section');
+        const resultsSection = document.getElementById('results-section');
+        const reviewSection = document.getElementById('review-section');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const questionNav = document.getElementById('question-nav');
+        const progressText = document.getElementById('progress-text');
+        const timeText = document.getElementById('time-text');
+        const progressFill = document.getElementById('progress-fill');
+        const timerElement = document.getElementById('timer');
+        const skipBtn = document.getElementById('skip-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const startBtn = document.getElementById('start-btn');
+        const scoreValue = document.getElementById('score-value');
+        const scoreText = document.getElementById('score-text');
+        const restartBtn = document.getElementById('restart-btn');
+        const reviewBtn = document.getElementById('review-btn');
+        const backToResultsBtn = document.getElementById('back-to-results-btn');
+        const restartFromReviewBtn = document.getElementById('restart-from-review-btn');
+        const reviewQuestions = document.getElementById('review-questions');
+
+        // Fisher-Yates Shuffle Algorithm
+        function shuffleArray(array) {
+            const newArray = [...array]; // Create a copy to avoid mutating the original
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Load completed questions from localStorage
+        function getCompletedQuestions() {
+            const completed = localStorage.getItem(COMPLETED_QUESTIONS_KEY);
+            return completed ? JSON.parse(completed) : [];
+        }
+
+        // Save completed question IDs to localStorage
+        function saveCompletedQuestions(completedIds) {
+            localStorage.setItem(COMPLETED_QUESTIONS_KEY, JSON.stringify(completedIds));
+        }
+
+        // Load quiz state from localStorage
+        function loadQuizState() {
+            const savedState = localStorage.getItem(QUIZ_STATE_KEY);
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                currentQuestionIndex = state.currentQuestionIndex;
+                userAnswers = state.userAnswers;
+                quizCompleted = state.quizCompleted;
+                // The questions were shuffled when the state was saved, so we need to shuffle them again to match the saved state
+                shuffledQuestions = shuffleArray(state.questions); // Use questions from saved state
+                return true;
+            }
+            return false;
+        }
+
+        // Save quiz state to localStorage
+        function saveQuizState() {
+            const state = {
+                currentQuestionIndex,
+                userAnswers: [...userAnswers], // Create a copy
+                quizCompleted,
+                questions: [...shuffledQuestions] // Save the current question set
+            };
+            localStorage.setItem(QUIZ_STATE_KEY, JSON.stringify(state));
+        }
+
+        // Clear quiz state from localStorage
+        function clearQuizState() {
+            localStorage.removeItem(QUIZ_STATE_KEY);
+        }
+
+        // Select unique questions for the quiz
+        function selectUniqueQuestions(allQuestions) {
+            const completedIds = getCompletedQuestions();
+            const availableQuestions = allQuestions.filter(q => !completedIds.includes(q.id));
+            
+            if (availableQuestions.length < TOTAL_QUESTIONS_PER_QUIZ) {
+                // If not enough new questions, reset completed list and use all questions
+                saveCompletedQuestions([]);
+                completedIds.length = 0; // Clear the array reference
+            }
+            
+            // If still not enough, use what's available (this shouldn't happen if you have enough total questions)
+            const questionsToUse = availableQuestions.length >= TOTAL_QUESTIONS_PER_QUIZ 
+                ? availableQuestions.slice(0, TOTAL_QUESTIONS_PER_QUIZ) 
+                : availableQuestions;
+            
+            return questionsToUse;
+        }
+
+        // Initialize the quiz
+        function initQuiz() {
+            const allQuestions = quizQuestions; // Use questions from script
+            const uniqueQuestions = selectUniqueQuestions(allQuestions);
+            shuffledQuestions = shuffleArray(uniqueQuestions);
+            
+            // Update progress text for 20 questions
+            progressText.textContent = `Question 1 of ${TOTAL_QUESTIONS_PER_QUIZ}`;
+            progressFill.style.width = `${(1 / TOTAL_QUESTIONS_PER_QUIZ) * 100}%`;
+            
+            createQuestionNavigation();
+            loadQuestion(currentQuestionIndex);
+            startTimer();
+        }
+
+        // Create question navigation dots
+        function createQuestionNavigation() {
+            questionNav.innerHTML = '';
+            shuffledQuestions.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'question-dot';
+                dot.textContent = index + 1;
+                dot.dataset.index = index;
+                dot.addEventListener('click', () => navigateToQuestion(index));
+                questionNav.appendChild(dot);
+            });
+            updateQuestionNavigation();
+        }
+
+        // Update question navigation dots
+        function updateQuestionNavigation() {
+            const dots = questionNav.querySelectorAll('.question-dot');
+            dots.forEach((dot, index) => {
+                dot.classList.remove('current', 'answered', 'skipped', 'incorrect');
+                
+                if (index === currentQuestionIndex) {
+                    dot.classList.add('current');
+                } else if (userAnswers[index] !== null) {
+                    if (userAnswers[index] === shuffledQuestions[index].correctAnswer) {
+                        dot.classList.add('answered');
+                    } else {
+                        dot.classList.add('incorrect');
+                    }
+                } else if (index < currentQuestionIndex) { // Skipped or timed out
+                    dot.classList.add('skipped');
+                }
+            });
+        }
+
+        // Load a specific question
+        function loadQuestion(index) {
+            if (index < 0 || index >= shuffledQuestions.length) return;
+            
+            currentQuestionIndex = index;
+            const question = shuffledQuestions[index];
+            
+            // Update question text
+            questionText.textContent = `${index + 1}. ${question.question}`;
+            
+            // Update progress
+            progressText.textContent = `Question ${index + 1} of ${TOTAL_QUESTIONS_PER_QUIZ}`;
+            progressFill.style.width = `${((index + 1) / TOTAL_QUESTIONS_PER_QUIZ) * 100}%`;
+            
+            // Clear and create options
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, optionIndex) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                
+                const isSelected = userAnswers[index] === optionIndex;
+                const isCorrect = optionIndex === question.correctAnswer;
+                const isSubmitted = userAnswers[index] !== null; // Check if question was answered
+                
+                if (isSelected) {
+                    optionElement.classList.add('selected');
+                }
+                if (isSubmitted) {
+                    if (isCorrect) {
+                        optionElement.classList.add('correct');
+                    } else if (isSelected) {
+                        optionElement.classList.add('incorrect');
+                    }
+                }
+                
+                const optionCircle = document.createElement('div');
+                optionCircle.className = 'option-circle';
+                
+                const optionText = document.createElement('div');
+                optionText.className = 'option-text';
+                optionText.textContent = option;
+                
+                optionElement.appendChild(optionCircle);
+                optionElement.appendChild(optionText);
+                
+                if (!isSubmitted) { // Only allow selection if not already answered
+                    optionElement.addEventListener('click', () => selectOption(optionIndex));
+                }
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update navigation buttons
+            prevBtn.disabled = index === 0;
+            skipBtn.disabled = userAnswers[index] !== null; // Disable skip if already answered
+            nextBtn.disabled = userAnswers[index] === null; // Disable next if not answered
+            nextBtn.textContent = index === shuffledQuestions.length - 1 ? 'Finish Quiz' : 'Next Question';
+            
+            updateQuestionNavigation();
+            resetTimer();
+            saveQuizState(); // Save state after loading question
+        }
+
+        // Select an option
+        function selectOption(optionIndex) {
+            if (userAnswers[currentQuestionIndex] !== null) return; // Prevent changing answer after submission
+            
+            userAnswers[currentQuestionIndex] = optionIndex;
+            
+            // Update UI
+            const options = optionsContainer.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            options[optionIndex].classList.add('selected');
+            
+            // Enable next button
+            nextBtn.disabled = false;
+            
+            updateQuestionNavigation();
+            saveQuizState(); // Save state after selecting option
+        }
+
+        // Navigate to a specific question
+        function navigateToQuestion(index) {
+            if (quizCompleted) return; // Prevent navigation after quiz is finished
+            loadQuestion(index);
+        }
+
+        // Timer functions
+        function startTimer() {
+            clearInterval(timer);
+            timeLeft = TIME_PER_QUESTION;
+            updateTimerDisplay();
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    handleTimeUp();
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            timeLeft = TIME_PER_QUESTION;
+            updateTimerDisplay();
+            startTimer();
+        }
+
+        function updateTimerDisplay() {
+            timerElement.textContent = timeLeft > 0 ? `${timeLeft}s` : "Time's Up!";
+            timeText.textContent = timeLeft > 0 ? `${timeLeft}s remaining` : "Time's Up!";
+            
+            // Update timer color based on remaining time
+            timerElement.classList.remove('warning', 'danger');
+            if (timeLeft <= 10) {
+                timerElement.classList.add('danger');
+            } else if (timeLeft <= 20) {
+                timerElement.classList.add('warning');
+            }
+        }
+        
+        function handleTimeUp() {
+            if (userAnswers[currentQuestionIndex] === null) {
+                userAnswers[currentQuestionIndex] = -1; // Mark as timed out
+            }
+            
+            if (currentQuestionIndex < shuffledQuestions.length - 1) {
+                loadQuestion(currentQuestionIndex + 1);
+            } else {
+                finishQuiz();
+            }
+        }
+
+        // Skip question
+        function skipQuestion() {
+            if (userAnswers[currentQuestionIndex] !== null) return; // Prevent skipping if already answered
+            userAnswers[currentQuestionIndex] = null; // Explicitly mark as skipped
+            
+            if (currentQuestionIndex < shuffledQuestions.length - 1) {
+                loadQuestion(currentQuestionIndex + 1);
+            } else {
+                finishQuiz();
+            }
+        }
+
+        // Finish quiz
+        function finishQuiz() {
+            clearInterval(timer);
+            quizCompleted = true;
+            
+            // Calculate score
+            const score = calculateScore();
+            const percentage = (score / shuffledQuestions.length) * 100;
+            
+            // Update results
+            scoreValue.textContent = `${score}/${shuffledQuestions.length}`;
+            
+            if (percentage >= 80) {
+                scoreText.textContent = 'Excellent! You have a strong understanding of ratios and proportions.';
+            } else if (percentage >= 60) {
+                scoreText.textContent = 'Good job! You have a solid foundation with some areas to improve.';
+            } else if (percentage >= 40) {
+                scoreText.textContent = 'Not bad! Review the concepts to strengthen your understanding.';
+            } else {
+                scoreText.textContent = 'Keep practicing! You\'ll improve with more study and practice.';
+            }
+            
+            // Add completed question IDs to localStorage
+            const completedIds = getCompletedQuestions();
+            const newCompletedIds = [...new Set([...completedIds, ...shuffledQuestions.map(q => q.id)])];
+            saveCompletedQuestions(newCompletedIds);
+            
+            saveQuizState(); // Save final state
+            
+            // Show results section
+            quizSection.classList.remove('active');
+            resultsSection.classList.add('active');
+        }
+
+        // Calculate score
+        function calculateScore() {
+            let score = 0;
+            userAnswers.forEach((answer, index) => {
+                if (answer === shuffledQuestions[index].correctAnswer) {
+                    score++;
+                }
+            });
+            return score;
+        }
+
+        // Show review section
+        function showReview() {
+            resultsSection.classList.remove('active');
+            reviewSection.classList.add('active');
+            
+            // Generate review content
+            reviewQuestions.innerHTML = '';
+            shuffledQuestions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === question.correctAnswer;
+                const isSkipped = userAnswer === null;
+                const isTimedOut = userAnswer === -1;
+                
+                const reviewItem = document.createElement('div');
+                reviewItem.className = `review-item ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                let statusText, statusClass;
+                if (isTimedOut) {
+                    statusText = 'Timed Out';
+                    statusClass = 'status-incorrect';
+                } else if (isSkipped) {
+                    statusText = 'Skipped';
+                    statusClass = 'status-skipped';
+                } else if (isCorrect) {
+                    statusText = 'Correct';
+                    statusClass = 'status-correct';
+                } else {
+                    statusText = 'Incorrect';
+                    statusClass = 'status-incorrect';
+                }
+                
+                reviewItem.innerHTML = `
+                    <div class="${statusClass} status-badge">${statusText}</div>
+                    <div class="review-question">${index + 1}. ${question.question}</div>
+                    <div class="review-answer">
+                        <div><strong>Your answer:</strong> ${isSkipped ? 'Skipped' : (isTimedOut ? 'Timed Out' : question.options[userAnswer])}</div>
+                        <div><strong>Correct answer:</strong> ${question.options[question.correctAnswer]}</div>
+                    </div>
+                    <div class="review-explanation">
+                        <strong>Explanation:</strong> ${question.explanation}
+                    </div>
+                `;
+                
+                reviewQuestions.appendChild(reviewItem);
+            });
+        }
+
+        // Restart quiz
+        function restartQuiz() {
+            // Clear state and reset variables
+            clearQuizState();
+            
+            // Reset state for a new quiz
+            currentQuestionIndex = 0;
+            userAnswers = new Array(TOTAL_QUESTIONS_PER_QUIZ).fill(null);
+            quizCompleted = false;
+            
+            // Hide all sections
+            quizSection.classList.remove('active');
+            resultsSection.classList.remove('active');
+            reviewSection.classList.remove('active');
+            
+            // Show intro section with start button
+            introSection.classList.add('active');
+            startBtn.style.display = 'block'; // Show the start button again
+            
+            // Reset UI elements (like question dots)
+            const dots = questionNav.querySelectorAll('.question-dot');
+            dots.forEach(dot => {
+                dot.classList.remove('current', 'answered', 'skipped', 'incorrect');
+            });
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', () => {
+            // Reset state for a new quiz
+            currentQuestionIndex = 0;
+            userAnswers = new Array(TOTAL_QUESTIONS_PER_QUIZ).fill(null);
+            quizCompleted = false;
+            
+            // Hide intro, show quiz
+            introSection.classList.remove('active');
+            quizSection.classList.add('active');
+            
+            // Hide the start button when the quiz starts
+            startBtn.style.display = 'none';
+            
+            // Initialize the quiz (fetch questions, select unique ones, etc.)
+            initQuiz();
+            
+            // Save initial state after questions are loaded
+            saveQuizState();
+        });
+
+        skipBtn.addEventListener('click', skipQuestion);
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < shuffledQuestions.length - 1) {
+                loadQuestion(currentQuestionIndex + 1);
+            } else {
+                finishQuiz();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                loadQuestion(currentQuestionIndex - 1);
+            }
+        });
+        
+        reviewBtn.addEventListener('click', showReview);
+        
+        restartBtn.addEventListener('click', restartQuiz);
+        
+        backToResultsBtn.addEventListener('click', () => {
+            reviewSection.classList.remove('active');
+            resultsSection.classList.add('active');
+        });
+        
+        restartFromReviewBtn.addEventListener('click', restartQuiz);
+
+        // Initialize the quiz when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+             // Show intro screen by default
+            introSection.classList.add('active');
+        });
+    </script>
+</body>
+</html>

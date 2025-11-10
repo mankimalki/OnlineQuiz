@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClassHub Login</title>
+<style>
+  body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: #f5f6fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .login-container {
+    background: #ffffff;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+    transition: 0.3s transform;
+  }
+
+  .login-container:hover {
+    transform: translateY(-3px);
+  }
+
+  .login-container h2 {
+    margin-bottom: 24px;
+    color: #333;
+    font-size: 24px;
+  }
+
+  .login-container input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+    transition: 0.2s border;
+  }
+
+  .login-container input:focus {
+    border-color: #007bff;
+  }
+
+  .login-container button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #007bff;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s background;
+  }
+
+  .login-container button:hover {
+    background: #0056b3;
+  }
+
+  #error {
+    margin-top: 12px;
+    font-size: 14px;
+    min-height: 18px;
+    color: red;
+  }
+
+  @media(max-width: 400px) {
+    .login-container {
+      padding: 30px 20px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <h2>ClassHub Login</h2>
+  <input id="email" type="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <p id="error"></p>
+</div>
+
+<script>
+  // Your deployed Apps Script web app URL
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz33S6QLPGnc48sSMPE6c8T8i_o2LB0RLgZmUszX_Hii8zKAqPfDM2V1YMbTuJ006Gr/exec";
+
+  async function login() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const err = document.getElementById("error");
+    err.textContent = "";
+    
+    if (!email || !password) {
+      err.textContent = "Please enter both email and password.";
+      return;
+    }
+
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'login', email, password })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        err.style.color = "green";
+        err.textContent = "Login successful!";
+        // Save user info in localStorage
+        localStorage.setItem("userName", data.name);
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("studentID", data.studentID);
+
+        // Redirect after successful login
+        setTimeout(() => {
+          // You can create separate dashboard pages for roles
+          if(data.role === "Teacher") {
+            window.location.href = "dashboard_teacher.html";
+          } else if(data.role === "Student") {
+            window.location.href = "dashboard_student.html";
+          } else if(data.role === "Parent") {
+            window.location.href = "dashboard_parent.html";
+          } else {
+            window.location.href = "dashboard.html"; // fallback
+          }
+        }, 800);
+      } else {
+        err.style.color = "red";
+        err.textContent = "Invalid email or password.";
+      }
+    } catch (e) {
+      err.textContent = "Error connecting to server.";
+      console.error(e);
+    }
+  }
+</script>
+
+</body>
+</html>
