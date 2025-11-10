@@ -8,13 +8,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Math&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Math&display=swap" rel="stylesheet">
     <style>
+        /* ... (Keep your existing CSS styles as they are) ... */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Nunito', sans-serif;
         }
-        
+
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
@@ -23,7 +24,7 @@
             justify-content: center;
             padding: 20px;
         }
-        
+
         .quiz-container {
             background: white;
             border-radius: 15px;
@@ -32,14 +33,14 @@
             max-width: 800px;
             overflow: hidden;
         }
-        
+
         .quiz-header {
             background: #2c5aa0;
             color: white;
             padding: 20px;
             text-align: center;
         }
-        
+
         .security-warning {
             background: #fff3cd;
             border: 1px solid #ffeaa7;
@@ -48,36 +49,36 @@
             font-size: 14px;
             color: #856404;
         }
-        
+
         .quiz-content {
             padding: 30px;
         }
-        
+
         .progress-container {
             margin-bottom: 20px;
         }
-        
+
         .progress-bar {
             height: 8px;
             background: #e9ecef;
             border-radius: 4px;
             overflow: hidden;
         }
-        
+
         .progress-fill {
             height: 100%;
             background: #2c5aa0;
             width: 0%;
             transition: width 0.3s ease;
         }
-        
+
         .progress-text {
             text-align: right;
             font-size: 14px;
             color: #6c757d;
             margin-top: 5px;
         }
-        
+
         .timer-container {
             background: #f8f9fa;
             padding: 15px;
@@ -86,24 +87,24 @@
             margin-bottom: 20px;
             border: 2px solid #e9ecef;
         }
-        
+
         .timer {
             font-size: 24px;
             font-weight: 700;
             color: #dc3545;
         }
-        
+
         .question-container {
             margin-bottom: 25px;
         }
-        
+
         .question-text {
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 15px;
             line-height: 1.5;
         }
-        
+
         .math-expression {
             font-family: 'STIX Two Math', 'Noto Sans Math', serif;
             font-size: 1.1em;
@@ -114,13 +115,13 @@
             border-radius: 5px;
             border-left: 4px solid #2c5aa0;
         }
-        
+
         .options-container {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-        
+
         .option {
             padding: 15px;
             border: 2px solid #e9ecef;
@@ -128,23 +129,23 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .option:hover {
             border-color: #2c5aa0;
             background: #f8f9fa;
         }
-        
+
         .option.selected {
             border-color: #2c5aa0;
             background: #e7f1ff;
         }
-        
+
         .navigation {
             display: flex;
             justify-content: space-between;
             margin-top: 25px;
         }
-        
+
         button {
             padding: 12px 25px;
             border: none;
@@ -153,44 +154,44 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .btn-prev {
             background: #6c757d;
             color: white;
         }
-        
+
         .btn-next {
             background: #2c5aa0;
             color: white;
         }
-        
+
         .btn-submit {
             background: #28a745;
             color: white;
         }
-        
+
         .completion-screen {
             text-align: center;
             padding: 30px;
         }
-        
+
         .completion-icon {
             font-size: 64px;
             color: #28a745;
             margin-bottom: 20px;
         }
-        
+
         .completion-message {
             font-size: 24px;
             margin-bottom: 20px;
             color: #2c5aa0;
         }
-        
+
         .loading-container {
             text-align: center;
             padding: 40px;
         }
-        
+
         .spinner {
             border: 5px solid #f3f3f3;
             border-top: 5px solid #2c5aa0;
@@ -200,12 +201,12 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         .error-message {
             background: #f8d7da;
             color: #721c24;
@@ -214,13 +215,13 @@
             margin-bottom: 20px;
             text-align: center;
         }
-        
+
         .math-option {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
+
         .option-letter {
             background: #2c5aa0;
             color: white;
@@ -233,32 +234,32 @@
             font-weight: bold;
             flex-shrink: 0;
         }
-        
+
         .submission-status {
             margin-top: 20px;
             padding: 15px;
             border-radius: 8px;
             text-align: center;
         }
-        
+
         .submission-success {
             background: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
-        
+
         .submission-error {
             background: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        
+
         .submission-loading {
             background: #d1ecf1;
             color: #0c5460;
             border: 1px solid #bee5eb;
         }
-        
+
         .debug-info {
             background: #e9ecef;
             padding: 10px;
@@ -275,21 +276,21 @@
             <h1>Online Assessment</h1>
             <p>Academic Integrity Required</p>
         </div>
-        
+
         <div class="security-warning" id="security-warning">
             ⚠️ This assessment is monitored. Any attempt to cheat will be recorded.
         </div>
-        
+
         <div class="quiz-content">
             <div id="loading-container" class="loading-container">
                 <div class="spinner"></div>
                 <p>Loading assessment...</p>
             </div>
-            
+
             <div id="error-container" class="error-message" style="display: none;">
                 <p>Error loading assessment. Please try again later.</p>
             </div>
-            
+
             <div id="quiz-section" style="display: none;">
                 <div class="progress-container">
                     <div class="progress-bar">
@@ -297,25 +298,25 @@
                     </div>
                     <div class="progress-text" id="progress-text">Question 0 of 0</div>
                 </div>
-                
+
                 <div class="timer-container">
                     <div>Time Remaining:</div>
                     <div class="timer" id="timer">60</div>
                 </div>
-                
+
                 <div id="question-section">
                     <div class="question-container">
                         <div class="question-text" id="question-text"></div>
                         <div class="options-container" id="options-container"></div>
                     </div>
-                    
+
                     <div class="navigation">
                         <button class="btn-prev" id="prev-btn" onclick="previousQuestion()">Previous</button>
                         <button class="btn-next" id="next-btn" onclick="nextQuestion()">Next</button>
                     </div>
                 </div>
             </div>
-            
+
             <div id="completion-section" class="completion-screen" style="display: none;">
                 <div class="completion-icon">✓</div>
                 <div class="completion-message" id="completion-message">Assessment Submitted Successfully!</div>
@@ -330,12 +331,13 @@
     </div>
 
     <script>
-        // Quiz configuration - YOUR GOOGLE APPS SCRIPT ID INTEGRATED
+        // Quiz configuration
         const config = {
-            submitUrl: 'https://script.google.com/macros/s/AKfycbzFaaps6Qg3ev0O9P_Hrr9vW1c6a2gvyk_PvPHU6CapsYvpmVZ6J2w4Mjwk7VblQGxJPw/exec',
+            // Make sure this URL points to your CORRECTLY UPDATED Google Apps Script deployment
+            submitUrl: 'https://script.google.com/macros/s/AKfycbyvh4-g5_GXiyGDol7AD-Lrb-jXOoNh8PGDoS48ks5wQAUbidgdgRMzlEbRRwN8Y0aRHA/exec',
             questionTime: 60,
             maxCheatingAttempts: 5,
-            questionsUrl: 'questions.json'
+            questionsUrl: 'questions.json' // Adjust if your questions file is elsewhere
         };
 
         // Quiz state
@@ -343,19 +345,19 @@
         let currentQuestion = 0;
         let studentData = {
             studentId: generateStudentId(),
-            studentName: "Anonymous Student",
+            studentName: prompt("Please enter your name:") || "Anonymous Student", // Simple prompt for name
             quizType: "Online Assessment",
-            startTime: new Date(),
+            startTime: null, // Will be set when quiz starts
             answers: [],
             timePerQuestion: [],
             windowFocusLost: 0,
             tabSwitches: 0,
             cheatingAttempts: 0
         };
-        
+
         let timeLeft = config.questionTime;
-        let timerInterval;
-        let questionStartTime;
+        let timerInterval = null;
+        let questionStartTime = null;
 
         async function initQuiz() {
             try {
@@ -363,25 +365,31 @@
                 document.getElementById('loading-container').style.display = 'none';
                 document.getElementById('quiz-section').style.display = 'block';
                 setupAntiCheating();
+                studentData.startTime = new Date(); // Set start time after initialization
                 showQuestion();
-                studentData.startTime = new Date();
             } catch (error) {
                 console.error('Error initializing quiz:', error);
                 document.getElementById('loading-container').style.display = 'none';
                 document.getElementById('error-container').style.display = 'block';
+                document.getElementById('error-container').innerHTML = `<p>Error loading assessment: ${error.message || 'Unknown error'}</p>`;
             }
         }
 
         async function loadQuestions() {
             try {
                 const response = await fetch(config.questionsUrl);
-                if (!response.ok) throw new Error('Failed to load questions');
+                if (!response.ok) {
+                    throw new Error(`Failed to load questions: ${response.status} ${response.statusText}`);
+                }
                 quizData = await response.json();
+                if (!Array.isArray(quizData) || quizData.length === 0) {
+                    throw new Error('Loaded questions data is not a valid array or is empty.');
+                }
                 studentData.answers = new Array(quizData.length).fill(null);
                 studentData.timePerQuestion = new Array(quizData.length).fill(0);
             } catch (error) {
                 console.error('Error loading questions:', error);
-                quizData = getFallbackQuestions();
+                quizData = getFallbackQuestions(); // Use fallback if external load fails
                 studentData.answers = new Array(quizData.length).fill(null);
                 studentData.timePerQuestion = new Array(quizData.length).fill(0);
             }
@@ -424,7 +432,7 @@
 
         function setupAntiCheating() {
             let visibilityStartTime = null;
-            
+
             document.addEventListener('visibilitychange', function() {
                 if (document.hidden) {
                     visibilityStartTime = new Date();
@@ -433,6 +441,7 @@
                     if (timeAway > 2) {
                         studentData.tabSwitches++;
                         studentData.cheatingAttempts++;
+                        console.warn("Potential tab switch detected. Cheating attempts:", studentData.cheatingAttempts);
                     }
                     visibilityStartTime = null;
                 }
@@ -441,30 +450,37 @@
             document.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
                 studentData.cheatingAttempts++;
+                console.warn("Right-click prevented. Cheating attempts:", studentData.cheatingAttempts);
                 return false;
             });
 
-            // Disable dev tools shortcuts
+            // Disable common dev tools shortcuts
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'F12' || 
-                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
+                if (e.key === 'F12' ||
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+                    (e.ctrlKey && e.key === 'u')) { // Disable Ctrl+U (View Source)
                     e.preventDefault();
                     studentData.cheatingAttempts++;
+                    console.warn("Dev tools shortcut blocked. Cheating attempts:", studentData.cheatingAttempts);
                     return false;
                 }
             });
         }
 
         function startTimer() {
-            if (timerInterval) clearInterval(timerInterval);
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
             timeLeft = config.questionTime;
             updateTimerDisplay();
             questionStartTime = new Date();
-            
+
             timerInterval = setInterval(() => {
                 timeLeft--;
                 updateTimerDisplay();
-                if (timeLeft <= 0) nextQuestion();
+                if (timeLeft <= 0) {
+                    nextQuestion(); // Automatically move to next question when time runs out
+                }
             }, 1000);
         }
 
@@ -478,34 +494,44 @@
         }
 
         function showQuestion() {
+            if (currentQuestion < 0 || currentQuestion >= quizData.length) {
+                 console.error("Invalid question index:", currentQuestion);
+                 return;
+            }
             const question = quizData[currentQuestion];
             const questionText = document.getElementById('question-text');
             questionText.innerHTML = question.question;
-            
+
+            // Clear any previous math expressions
+            const existingMath = questionText.querySelector('.math-expression');
+            if (existingMath) {
+                existingMath.remove();
+            }
+
             if (question.mathExpression) {
                 const mathElement = document.createElement('div');
                 mathElement.className = 'math-expression';
                 mathElement.innerHTML = question.mathExpression;
                 questionText.appendChild(mathElement);
             }
-            
+
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
-            
+
             question.options.forEach((option, index) => {
                 const optionElement = document.createElement('div');
                 optionElement.className = 'option';
                 if (studentData.answers[currentQuestion] === index) {
                     optionElement.classList.add('selected');
                 }
-                
+
                 const optionContent = document.createElement('div');
                 optionContent.className = 'math-option';
-                
+
                 const letterSpan = document.createElement('span');
                 letterSpan.className = 'option-letter';
                 letterSpan.textContent = ['A', 'B', 'C', 'D'][index];
-                
+
                 const textSpan = document.createElement('span');
                 if (option.includes('π') || option.includes('∫') || option.includes('√') || option.includes('x =')) {
                     textSpan.className = 'math-expression';
@@ -515,28 +541,36 @@
                     textSpan.style.margin = '0';
                 }
                 textSpan.innerHTML = option;
-                
+
                 optionContent.appendChild(letterSpan);
                 optionContent.appendChild(textSpan);
                 optionElement.appendChild(optionContent);
                 optionElement.onclick = () => selectAnswer(index);
                 optionsContainer.appendChild(optionElement);
             });
-            
+
             updateProgress();
             updateNavigation();
-            startTimer();
+            startTimer(); // Start timer for the new question
         }
 
         function selectAnswer(answerIndex) {
-            const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
-            studentData.timePerQuestion[currentQuestion] = timeSpent;
-            studentData.answers[currentQuestion] = answerIndex;
-            
-            const options = document.querySelectorAll('.option');
-            options.forEach((option, index) => {
-                option.classList.toggle('selected', index === answerIndex);
-            });
+            if (studentData.answers[currentQuestion] === answerIndex) {
+                // Deselect if the same option is clicked again
+                studentData.answers[currentQuestion] = null;
+                const options = document.querySelectorAll('.option');
+                options.forEach(option => option.classList.remove('selected'));
+            } else {
+                // Record the new answer and time spent on this question so far
+                const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
+                studentData.timePerQuestion[currentQuestion] = timeSpent;
+                studentData.answers[currentQuestion] = answerIndex;
+
+                const options = document.querySelectorAll('.option');
+                options.forEach((option, index) => {
+                    option.classList.toggle('selected', index === answerIndex);
+                });
+            }
         }
 
         function updateProgress() {
@@ -548,11 +582,11 @@
         function updateNavigation() {
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
-            
+
             prevBtn.disabled = currentQuestion === 0;
             prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
             prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
-            
+
             if (currentQuestion === quizData.length - 1) {
                 nextBtn.textContent = 'Submit';
                 nextBtn.className = 'btn-submit';
@@ -564,17 +598,25 @@
 
         function previousQuestion() {
             if (currentQuestion > 0) {
-                const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
-                studentData.timePerQuestion[currentQuestion] = timeSpent;
+                // Record time spent on current question before navigating
+                if (questionStartTime) {
+                     const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
+                     studentData.timePerQuestion[currentQuestion] = timeSpent;
+                }
+                clearInterval(timerInterval); // Stop current timer
                 currentQuestion--;
                 showQuestion();
             }
         }
 
         function nextQuestion() {
-            const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
-            studentData.timePerQuestion[currentQuestion] = timeSpent;
-            
+            // Record time spent on current question before navigating
+             if (questionStartTime) {
+                 const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
+                 studentData.timePerQuestion[currentQuestion] = timeSpent;
+             }
+             clearInterval(timerInterval); // Stop current timer
+
             if (currentQuestion < quizData.length - 1) {
                 currentQuestion++;
                 showQuestion();
@@ -585,35 +627,47 @@
 
         async function submitQuiz() {
             try {
+                // Ensure timer is stopped
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                }
+                // Record final question time if not already recorded
+                if (questionStartTime && studentData.timePerQuestion[currentQuestion] === 0) {
+                     const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
+                     studentData.timePerQuestion[currentQuestion] = timeSpent;
+                }
+
                 const endTime = new Date();
                 studentData.endTime = endTime;
                 studentData.totalTime = Math.round((endTime - studentData.startTime) / 1000);
-                
+
                 let score = 0;
                 quizData.forEach((question, index) => {
                     if (studentData.answers[index] === question.correctAnswer) {
                         score++;
                     }
                 });
-                
+
                 // Calculate deductions for cheating attempts
-                const totalDeductions = studentData.cheatingAttempts * 2;
+                const totalDeductions = Math.min(studentData.cheatingAttempts * 2, score); // Cap deductions at score
                 let finalScore = Math.max(0, score - totalDeductions);
-                
+
                 studentData.score = score;
                 studentData.finalScore = finalScore;
                 studentData.totalDeductions = totalDeductions;
-                studentData.percentage = Math.round((finalScore / quizData.length) * 100);
-                
+                studentData.percentage = quizData.length > 0 ? Math.round((finalScore / quizData.length) * 100) : 0;
+
+                console.log("Submitting data:", JSON.stringify(studentData, null, 2)); // Debug log
+
                 // Show completion screen
                 document.getElementById('quiz-section').style.display = 'none';
                 document.getElementById('completion-section').style.display = 'block';
-                
+
                 // Submit to Google Apps Script
                 await submitToGoogleAppsScript(studentData);
-                
+
             } catch (error) {
-                console.error('Error submitting quiz:', error);
+                console.error('Error during quiz submission:', error);
                 showSubmissionError(error);
             }
         }
@@ -621,16 +675,16 @@
         async function submitToGoogleAppsScript(data) {
             const statusElement = document.getElementById('submission-status');
             const debugElement = document.getElementById('debug-info');
-            
+
             try {
                 const submissionData = {
                     action: 'submitQuiz',
                     timestamp: new Date().toISOString(),
                     data: data
                 };
-                
+
                 console.log('Submitting data to Google Apps Script:', submissionData);
-                
+
                 // Show debug info
                 debugElement.style.display = 'block';
                 debugElement.innerHTML = `
@@ -638,9 +692,10 @@
                     Submitting to: ${config.submitUrl}<br>
                     Student ID: ${data.studentId}<br>
                     Score: ${data.score}/${quizData.length}<br>
-                    Data size: ${JSON.stringify(submissionData).length} characters
+                    Data size: ${JSON.stringify(submissionData).length} characters<br>
+                    Cheating Attempts: ${data.cheatingAttempts}
                 `;
-                
+
                 const response = await fetch(config.submitUrl, {
                     method: 'POST',
                     headers: {
@@ -648,16 +703,33 @@
                     },
                     body: JSON.stringify(submissionData)
                 });
-                
+
                 console.log('Response status:', response.status);
-                
+
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    // Try to get error details from response body
+                    let errorMessage = `HTTP error! status: ${response.status}`;
+                    try {
+                        const errorBody = await response.text(); // GAS usually returns JSON, but let's try text first
+                        console.log("Response Text:", errorBody);
+                        // Attempt to parse as JSON if possible
+                        try {
+                            const errorJson = JSON.parse(errorBody);
+                            errorMessage = errorJson.error || errorJson.message || errorMessage;
+                        } catch {
+                            // If not JSON, use the text as the error message
+                            errorMessage = errorBody || errorMessage;
+                        }
+                    } catch (e) {
+                        console.error("Could not read error response body:", e);
+                        // errorMessage remains the HTTP status error
+                    }
+                    throw new Error(errorMessage);
                 }
-                
+
                 const result = await response.json();
                 console.log('Server response:', result);
-                
+
                 if (result.success) {
                     statusElement.className = 'submission-status submission-success';
                     statusElement.innerHTML = `
@@ -667,24 +739,32 @@
                     `;
                     debugElement.innerHTML += `<br><br><strong>Success Response:</strong><br>${JSON.stringify(result, null, 2)}`;
                 } else {
-                    throw new Error(result.error || 'Unknown server error');
+                    // Server returned success=false
+                    throw new Error(result.error || result.message || 'Unknown server error');
                 }
-                
+
             } catch (error) {
                 console.error('Submission error:', error);
                 statusElement.className = 'submission-status submission-error';
                 statusElement.innerHTML = `
                     <strong>⚠️ Failed to save to Google Sheets</strong><br>
-                    <small>Data saved locally as backup</small><br>
-                    <small>Error: ${error.message}</small>
+                    <small>Error: ${error.message}</small><br>
+                    <small>Check console for details. Data may be saved locally as backup.</small>
                 `;
                 debugElement.innerHTML += `<br><br><strong>Error:</strong> ${error.message}`;
-                
+
                 // Save locally as backup
-                localStorage.setItem('quiz_backup_' + data.studentId, JSON.stringify(data));
-                console.log('Data saved locally as backup');
+                try {
+                    localStorage.setItem('quiz_backup_' + data.studentId, JSON.stringify(data));
+                    console.log('Data saved locally as backup');
+                    statusElement.innerHTML += `<br><small>Data saved locally as backup.</small>`;
+                } catch (lsError) {
+                    console.error("Failed to save backup to localStorage:", lsError);
+                    statusElement.innerHTML += `<br><small>Failed to save backup locally.</small>`;
+                }
             }
         }
+
 
         function showSubmissionError(error) {
             const statusElement = document.getElementById('submission-status');
@@ -692,8 +772,17 @@
             statusElement.innerHTML = `
                 <strong>⚠️ Submission Error</strong><br>
                 <small>${error.message}</small><br>
-                <small>Your data has been saved locally.</small>
+                <small>Your data may have been saved locally.</small>
             `;
+            // Attempt to save backup if not already done in submitToGoogleAppsScript
+             if (typeof localStorage !== 'undefined') {
+                 try {
+                     localStorage.setItem('quiz_backup_' + studentData.studentId, JSON.stringify(studentData));
+                     console.log('Data saved locally as backup in error handler');
+                 } catch (e) {
+                     console.error("Failed to save backup in error handler:", e);
+                 }
+             }
         }
 
         function generateStudentId() {
