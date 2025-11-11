@@ -493,7 +493,7 @@
     </div>
 
     <script>
-        // 🔧 CONFIGURATION - YOUR CORRECTED GOOGLE APPS SCRIPT URL
+        // 🔧 CONFIGURATION - YOUR GOOGLE APPS SCRIPT URL
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3vd2wAcmlnnZP6HsZel2qSART2BU912SGswaXZOjcJMXr96-xJjcFwKOxid1iyYC0/exec';
         
         // Quiz data
@@ -579,26 +579,38 @@
         testConnectionBtn.addEventListener('click', testConnection);
         nextQuestionBtn.addEventListener('click', nextQuestion);
 
+        // Anti-cheating measures
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        document.addEventListener('copy', preventCopy);
+        document.addEventListener('cut', preventCopy);
+        document.addEventListener('paste', preventCopy);
+        document.addEventListener('contextmenu', preventRightClick);
+        document.addEventListener('keydown', preventScreenshot);
+
         // Test connection function
         async function testConnection() {
             console.log('Testing connection to:', GOOGLE_APPS_SCRIPT_URL);
             showDebug('Testing connection to Google Apps Script...');
             
             try {
-                const response = await fetch(GOOGLE_APPS_SCRIPT_URL);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'test'
+                    })
+                });
                 
                 const result = await response.json();
-                showDebug('Connection successful! Response: ' + JSON.stringify(result));
-                showSuccess('✅ Connection successful! Script is working properly.');
+                showDebug('Connection response: ' + JSON.stringify(result));
+                showSuccess('✅ Connection successful! Google Sheets is ready.');
                 
             } catch (error) {
                 console.error('Connection test failed:', error);
                 showDebug('Connection test failed: ' + error.message);
-                showError('❌ Connection failed. Please check your script URL and deployment settings.');
+                showError('❌ Connection failed. Please check your script URL and deployment.');
             }
         }
 
@@ -628,25 +640,22 @@
                     })
                 });
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
                 const result = await response.json();
                 showDebug('Check attempt response: ' + JSON.stringify(result));
                 return result.hasAttempted || false;
             } catch (error) {
                 console.error('Error checking student attempt:', error);
                 showDebug('Error checking attempt: ' + error.message);
-                showError('Network error. Please check your connection and try again.');
                 return false;
             }
         }
 
-        // Save data to Google Sheets
+        // Save data to Google Sheets - FIXED VERSION
         async function saveToSheets(data) {
             try {
-                showDebug('Sending data to Google Sheets: ' + JSON.stringify(data));
+                console.log('Saving to Google Sheets:', data);
+                showDebug('Sending data: ' + JSON.stringify(data));
+                
                 const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
                     method: 'POST',
                     headers: {
@@ -660,12 +669,13 @@
                 }
                 
                 const result = await response.json();
-                showDebug('Save response: ' + JSON.stringify(result));
-                return result.success;
+                console.log('Save response:', result);
+                showDebug('Save successful: ' + JSON.stringify(result));
+                
+                return result.success === true;
             } catch (error) {
                 console.error('Error saving to sheets:', error);
                 showDebug('Save error: ' + error.message);
-                showError('Failed to save data. Please try again.');
                 return false;
             }
         }
@@ -722,7 +732,7 @@
             const sessionSaved = await saveToSheets(sessionData);
             
             if (!sessionSaved) {
-                showError("Failed to start quiz session. Please try again.");
+                showError("Failed to start quiz session. Please check your connection and try again.");
                 loadingWelcome.classList.remove('active');
                 startQuizBtn.disabled = false;
                 return;
@@ -742,7 +752,7 @@
             startTimer();
             
             loadingWelcome.classList.remove('active');
-            showSuccess("Quiz started successfully! Good luck!");
+            showSuccess("Quiz started successfully! Data is being saved to Google Sheets.");
         }
 
         function loadQuestion() {
@@ -832,7 +842,14 @@
                 timestamp: new Date().toISOString()
             };
             
-            await saveToSheets(saveData);
+            const answerSaved = await saveToSheets(saveData);
+            
+            if (!answerSaved) {
+                showError("Failed to save answer. Please check your connection.");
+                loadingQuiz.classList.remove('active');
+                nextQuestionBtn.disabled = false;
+                return;
+            }
             
             // Move to next question or finish quiz
             currentQuestion++;
@@ -890,9 +907,9 @@
                 quizSection.classList.remove('active');
                 resultsSection.classList.add('active');
                 
-                showSuccess("Your results have been saved successfully!");
+                showSuccess("✅ Quiz completed! All data has been saved to Google Sheets.");
             } else {
-                showError("There was an error saving your results. Please contact your instructor.");
+                showError("❌ There was an error saving your results to Google Sheets. Please contact your instructor.");
             }
             
             nextQuestionBtn.disabled = false;
@@ -975,7 +992,7 @@
             successMessage.classList.add('active');
             setTimeout(() => {
                 successMessage.classList.remove('active');
-            }, 3000);
+            }, 5000);
         }
 
         function showDebug(message) {
@@ -1046,6 +1063,7 @@
             console.log('Quiz system loaded');
             console.log('Google Apps Script URL:', GOOGLE_APPS_SCRIPT_URL);
             showDebug('System loaded. Script URL: ' + GOOGLE_APPS_SCRIPT_URL);
+            showSuccess('Ready to start! Click "Test Connection First" to verify Google Sheets integration.');
         });
     </script>
 </body>
