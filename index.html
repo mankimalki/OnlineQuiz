@@ -3,794 +3,949 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Assessment Quiz</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Math&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Math&display=swap" rel="stylesheet">
+    <title>Secure Quiz System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ... (Keep your existing CSS styles as they are) ... */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Nunito', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-
+        
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #fafafa;
+            color: #1a1a1a;
+            line-height: 1.5;
             min-height: 100vh;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .header {
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        
+        .title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #111827;
+        }
+        
+        .description {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+        
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+            background-color: white;
+        }
+        
+        input[type="text"]:focus, input[type="email"]:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .btn {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+        
+        .btn:active {
+            background-color: #1e40af;
+        }
+        
+        .btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        .timer-container {
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding: 12px 16px;
+            background-color: #f3f4f6;
+            border-radius: 6px;
         }
-
-        .quiz-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 800px;
-            overflow: hidden;
-        }
-
-        .quiz-header {
-            background: #2c5aa0;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .security-warning {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            padding: 10px;
-            text-align: center;
-            font-size: 14px;
-            color: #856404;
-        }
-
-        .quiz-content {
-            padding: 30px;
-        }
-
-        .progress-container {
-            margin-bottom: 20px;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: #e9ecef;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #2c5aa0;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .progress-text {
-            text-align: right;
-            font-size: 14px;
-            color: #6c757d;
-            margin-top: 5px;
-        }
-
-        .timer-container {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-            border: 2px solid #e9ecef;
-        }
-
+        
         .timer {
-            font-size: 24px;
-            font-weight: 700;
-            color: #dc3545;
+            font-weight: 600;
+            color: #dc2626;
         }
-
+        
         .question-container {
-            margin-bottom: 25px;
+            margin-bottom: 32px;
         }
-
+        
+        .question-number {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        
         .question-text {
             font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            line-height: 1.5;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #111827;
         }
-
-        .math-expression {
-            font-family: 'STIX Two Math', 'Noto Sans Math', serif;
-            font-size: 1.1em;
-            padding: 5px 0;
-            margin: 10px 0;
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 5px;
-            border-left: 4px solid #2c5aa0;
-        }
-
-        .options-container {
+        
+        .options {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
-
+        
         .option {
-            padding: 15px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
+            background-color: white;
         }
-
+        
         .option:hover {
-            border-color: #2c5aa0;
-            background: #f8f9fa;
+            background-color: #f9fafb;
+            border-color: #d1d5db;
         }
-
+        
         .option.selected {
-            border-color: #2c5aa0;
-            background: #e7f1ff;
+            background-color: #eff6ff;
+            border-color: #2563eb;
         }
-
-        .navigation {
+        
+        .warning {
+            background-color: #fef2f2;
+            color: #dc2626;
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .warning.active {
+            display: flex;
+            animation: shake 0.5s;
+        }
+        
+        .security-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background-color: #fef3c7;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        
+        .progress-container {
+            margin-bottom: 24px;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background-color: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #2563eb;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .results-container {
+            text-align: center;
+        }
+        
+        .score {
+            font-size: 48px;
+            font-weight: 700;
+            color: #2563eb;
+            margin: 24px 0;
+        }
+        
+        .summary {
+            text-align: left;
+            background-color: #f9fafb;
+            padding: 24px;
+            border-radius: 8px;
+            margin-top: 24px;
+        }
+        
+        .summary-item {
             display: flex;
             justify-content: space-between;
-            margin-top: 25px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
         }
-
-        button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-label {
+            color: #6b7280;
+        }
+        
+        .summary-value {
+            font-weight: 500;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .instructions {
+            background-color: #eff6ff;
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 24px;
+        }
+        
+        .instructions-title {
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            margin-bottom: 8px;
+            color: #1e40af;
         }
-
-        .btn-prev {
-            background: #6c757d;
-            color: white;
+        
+        .instructions-list {
+            padding-left: 20px;
         }
-
-        .btn-next {
-            background: #2c5aa0;
-            color: white;
+        
+        .instructions-list li {
+            margin-bottom: 4px;
         }
-
-        .btn-submit {
-            background: #28a745;
-            color: white;
+        
+        .icon {
+            width: 20px;
+            height: 20px;
         }
-
-        .completion-screen {
+        
+        .student-info {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 24px;
             text-align: center;
-            padding: 30px;
         }
-
-        .completion-icon {
-            font-size: 64px;
-            color: #28a745;
-            margin-bottom: 20px;
-        }
-
-        .completion-message {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #2c5aa0;
-        }
-
-        .loading-container {
+        
+        .loading {
+            display: none;
             text-align: center;
-            padding: 40px;
+            padding: 20px;
         }
-
-        .spinner {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #2c5aa0;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+        
+        .loading.active {
+            display: block;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
+        
         .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background-color: #fef2f2;
+            color: #dc2626;
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
             text-align: center;
+            display: none;
         }
-
-        .math-option {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .option-letter {
-            background: #2c5aa0;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .submission-status {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .submission-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .submission-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .submission-loading {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
-        .debug-info {
-            background: #e9ecef;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            margin-top: 10px;
-            word-break: break-all;
+        
+        .error-message.active {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="quiz-container">
-        <div class="quiz-header">
-            <h1>Online Assessment</h1>
-            <p>Academic Integrity Required</p>
+    <div class="container">
+        <!-- Welcome Section -->
+        <div id="welcome-section" class="section active">
+            <div class="header">
+                <h1 class="title">Secure Quiz System</h1>
+                <p class="description">Please enter your details to begin the assessment</p>
+            </div>
+            
+            <div class="instructions">
+                <div class="instructions-title">Important Instructions</div>
+                <ul class="instructions-list">
+                    <li>You have 60 seconds to answer each question</li>
+                    <li>Switching tabs will result in a 2-point penalty</li>
+                    <li>Copying text or taking screenshots is prohibited</li>
+                    <li>More than 6 cheating attempts will terminate the quiz</li>
+                    <li>Each student can attempt the quiz only once</li>
+                </ul>
+            </div>
+            
+            <div class="error-message" id="error-message"></div>
+            
+            <div class="form-group">
+                <label for="student-name">Full Name</label>
+                <input type="text" id="student-name" placeholder="Enter your full name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="student-email">Email Address</label>
+                <input type="email" id="student-email" placeholder="Enter your email address" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="student-id">Student ID</label>
+                <input type="text" id="student-id" placeholder="Enter your student ID" required>
+            </div>
+            
+            <button id="start-quiz" class="btn">Start Quiz</button>
+            
+            <div class="loading" id="loading-welcome">
+                <p>Verifying your access...</p>
+            </div>
         </div>
-
-        <div class="security-warning" id="security-warning">
-            ⚠️ This assessment is monitored. Any attempt to cheat will be recorded.
+        
+        <!-- Quiz Section -->
+        <div id="quiz-section" class="section">
+            <div class="student-info" id="student-display"></div>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+            </div>
+            
+            <div class="timer-container">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>Time remaining: <span class="timer" id="timer">60s</span></div>
+            </div>
+            
+            <div class="warning" id="warning">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+                <div>Warning! You have switched tabs. 2 points will be deducted from your score.</div>
+            </div>
+            
+            <div class="question-container">
+                <div class="question-number" id="question-number">Question 1 of 5</div>
+                <div class="question-text" id="question-text">What is the capital of France?</div>
+                
+                <div class="options" id="options">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="security-info">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+                <div>Security Status: <span id="cheating-count">0</span> cheating attempts detected</div>
+            </div>
+            
+            <button id="next-question" class="btn">Next Question</button>
+            
+            <div class="loading" id="loading-quiz">
+                <p>Saving your progress...</p>
+            </div>
         </div>
-
-        <div class="quiz-content">
-            <div id="loading-container" class="loading-container">
-                <div class="spinner"></div>
-                <p>Loading assessment...</p>
+        
+        <!-- Results Section -->
+        <div id="results-section" class="section">
+            <div class="header">
+                <h1 class="title">Quiz Completed</h1>
+                <p class="description">Thank you for completing the assessment</p>
             </div>
-
-            <div id="error-container" class="error-message" style="display: none;">
-                <p>Error loading assessment. Please try again later.</p>
+            
+            <div class="results-container">
+                <div class="score" id="final-score">0/50</div>
+                
+                <div class="summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Student Name:</span>
+                        <span class="summary-value" id="summary-name">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Email:</span>
+                        <span class="summary-value" id="summary-email">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Student ID:</span>
+                        <span class="summary-value" id="summary-id">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Total Questions:</span>
+                        <span class="summary-value" id="summary-total">5</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Correct Answers:</span>
+                        <span class="summary-value" id="summary-correct">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Cheating Attempts:</span>
+                        <span class="summary-value" id="summary-cheating">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Points Deducted:</span>
+                        <span class="summary-value" id="summary-deducted">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Final Score:</span>
+                        <span class="summary-value" id="summary-final">0</span>
+                    </div>
+                </div>
             </div>
-
-            <div id="quiz-section" style="display: none;">
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progress-fill"></div>
-                    </div>
-                    <div class="progress-text" id="progress-text">Question 0 of 0</div>
-                </div>
-
-                <div class="timer-container">
-                    <div>Time Remaining:</div>
-                    <div class="timer" id="timer">60</div>
-                </div>
-
-                <div id="question-section">
-                    <div class="question-container">
-                        <div class="question-text" id="question-text"></div>
-                        <div class="options-container" id="options-container"></div>
-                    </div>
-
-                    <div class="navigation">
-                        <button class="btn-prev" id="prev-btn" onclick="previousQuestion()">Previous</button>
-                        <button class="btn-next" id="next-btn" onclick="nextQuestion()">Next</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="completion-section" class="completion-screen" style="display: none;">
-                <div class="completion-icon">✓</div>
-                <div class="completion-message" id="completion-message">Assessment Submitted Successfully!</div>
-                <p>Your responses have been recorded. Results will be available to your instructor.</p>
-                <div id="submission-status" class="submission-status submission-loading">
-                    <div class="spinner" style="width: 30px; height: 30px; border-width: 3px; display: inline-block;"></div>
-                    <p>Submitting results to server...</p>
-                </div>
-                <div id="debug-info" class="debug-info" style="display: none;"></div>
+            
+            <div class="loading" id="loading-results">
+                <p>Saving your results...</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Quiz configuration
-        const config = {
-            // Make sure this URL points to your CORRECTLY UPDATED Google Apps Script deployment
-            submitUrl: 'https://script.google.com/macros/s/AKfycbyvh4-g5_GXiyGDol7AD-Lrb-jXOoNh8PGDoS48ks5wQAUbidgdgRMzlEbRRwN8Y0aRHA/exec',
-            questionTime: 60,
-            maxCheatingAttempts: 5,
-            questionsUrl: 'questions.json' // Adjust if your questions file is elsewhere
-        };
+        // Configuration - UPDATE THESE WITH YOUR GOOGLE APPS SCRIPT URL
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3vd2wAcmlnnZP6HsZel2qSART2BU912SGswaXZOjcJMXr96-xJjcFwKOxid1iyYC0/exec';
+        
+        // Quiz data
+        const quizData = [
+            {
+                question: "What is the capital of France?",
+                options: ["London", "Berlin", "Paris", "Madrid"],
+                correct: 2
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Venus", "Mars", "Jupiter", "Saturn"],
+                correct: 1
+            },
+            {
+                question: "What is the largest mammal in the world?",
+                options: ["Elephant", "Blue Whale", "Giraffe", "Polar Bear"],
+                correct: 1
+            },
+            {
+                question: "Who wrote 'Romeo and Juliet'?",
+                options: ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"],
+                correct: 1
+            },
+            {
+                question: "What is the chemical symbol for gold?",
+                options: ["Go", "Gd", "Au", "Ag"],
+                correct: 2
+            }
+        ];
+
+        // DOM elements
+        const welcomeSection = document.getElementById('welcome-section');
+        const quizSection = document.getElementById('quiz-section');
+        const resultsSection = document.getElementById('results-section');
+        const studentNameInput = document.getElementById('student-name');
+        const studentEmailInput = document.getElementById('student-email');
+        const studentIdInput = document.getElementById('student-id');
+        const studentDisplay = document.getElementById('student-display');
+        const startQuizBtn = document.getElementById('start-quiz');
+        const nextQuestionBtn = document.getElementById('next-question');
+        const timerElement = document.getElementById('timer');
+        const warningElement = document.getElementById('warning');
+        const questionNumberElement = document.getElementById('question-number');
+        const questionTextElement = document.getElementById('question-text');
+        const optionsElement = document.getElementById('options');
+        const cheatingCountElement = document.getElementById('cheating-count');
+        const progressElement = document.getElementById('progress');
+        const finalScoreElement = document.getElementById('final-score');
+        const summaryNameElement = document.getElementById('summary-name');
+        const summaryEmailElement = document.getElementById('summary-email');
+        const summaryIdElement = document.getElementById('summary-id');
+        const summaryTotalElement = document.getElementById('summary-total');
+        const summaryCorrectElement = document.getElementById('summary-correct');
+        const summaryCheatingElement = document.getElementById('summary-cheating');
+        const summaryDeductedElement = document.getElementById('summary-deducted');
+        const summaryFinalElement = document.getElementById('summary-final');
+        const errorMessage = document.getElementById('error-message');
+        const loadingWelcome = document.getElementById('loading-welcome');
+        const loadingQuiz = document.getElementById('loading-quiz');
+        const loadingResults = document.getElementById('loading-results');
 
         // Quiz state
-        let quizData = [];
         let currentQuestion = 0;
-        let studentData = {
-            studentId: generateStudentId(),
-            studentName: prompt("Please enter your name:") || "Anonymous Student", // Simple prompt for name
-            quizType: "Online Assessment",
-            startTime: null, // Will be set when quiz starts
-            answers: [],
-            timePerQuestion: [],
-            windowFocusLost: 0,
-            tabSwitches: 0,
-            cheatingAttempts: 0
-        };
+        let score = 0;
+        let timeLeft = 60;
+        let timer;
+        let cheatingAttempts = 0;
+        let studentName = "";
+        let studentEmail = "";
+        let studentId = "";
+        let selectedOption = null;
+        let tabSwitched = false;
+        let answers = [];
+        let sessionId = '';
+        let hasAttempted = false;
 
-        let timeLeft = config.questionTime;
-        let timerInterval = null;
-        let questionStartTime = null;
+        // Event listeners
+        startQuizBtn.addEventListener('click', startQuiz);
+        nextQuestionBtn.addEventListener('click', nextQuestion);
 
-        async function initQuiz() {
+        // Anti-cheating measures
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        document.addEventListener('copy', preventCopy);
+        document.addEventListener('cut', preventCopy);
+        document.addEventListener('paste', preventCopy);
+        document.addEventListener('contextmenu', preventRightClick);
+        document.addEventListener('keydown', preventScreenshot);
+
+        // Generate unique session ID
+        function generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Check if student has already attempted
+        async function checkStudentAttempt() {
+            const studentId = studentIdInput.value.trim();
+            const email = studentEmailInput.value.trim();
+            
+            if (!studentId || !email) return false;
+            
             try {
-                await loadQuestions();
-                document.getElementById('loading-container').style.display = 'none';
-                document.getElementById('quiz-section').style.display = 'block';
-                setupAntiCheating();
-                studentData.startTime = new Date(); // Set start time after initialization
-                showQuestion();
-            } catch (error) {
-                console.error('Error initializing quiz:', error);
-                document.getElementById('loading-container').style.display = 'none';
-                document.getElementById('error-container').style.display = 'block';
-                document.getElementById('error-container').innerHTML = `<p>Error loading assessment: ${error.message || 'Unknown error'}</p>`;
-            }
-        }
-
-        async function loadQuestions() {
-            try {
-                const response = await fetch(config.questionsUrl);
-                if (!response.ok) {
-                    throw new Error(`Failed to load questions: ${response.status} ${response.statusText}`);
-                }
-                quizData = await response.json();
-                if (!Array.isArray(quizData) || quizData.length === 0) {
-                    throw new Error('Loaded questions data is not a valid array or is empty.');
-                }
-                studentData.answers = new Array(quizData.length).fill(null);
-                studentData.timePerQuestion = new Array(quizData.length).fill(0);
-            } catch (error) {
-                console.error('Error loading questions:', error);
-                quizData = getFallbackQuestions(); // Use fallback if external load fails
-                studentData.answers = new Array(quizData.length).fill(null);
-                studentData.timePerQuestion = new Array(quizData.length).fill(0);
-            }
-        }
-
-        function getFallbackQuestions() {
-            return [
-                {
-                    "question": "Solve the equation for x:",
-                    "mathExpression": "2x + 5 = 13",
-                    "options": ["x = 4", "x = 5", "x = 6", "x = 7"],
-                    "correctAnswer": 0
-                },
-                {
-                    "question": "What is the integral of x² from 0 to 1?",
-                    "mathExpression": "∫₀¹ x² dx",
-                    "options": ["1/2", "1/3", "1/4", "1/5"],
-                    "correctAnswer": 1
-                },
-                {
-                    "question": "Simplify the expression:",
-                    "mathExpression": "√16 + ∛27",
-                    "options": ["5", "6", "7", "8"],
-                    "correctAnswer": 2
-                },
-                {
-                    "question": "What is the derivative of f(x) = 3x³ - 2x² + 5x - 7?",
-                    "mathExpression": "",
-                    "options": ["9x² - 4x + 5", "6x² - 4x + 5", "9x² - 2x + 5", "6x² - 2x + 5"],
-                    "correctAnswer": 0
-                },
-                {
-                    "question": "Solve the quadratic equation:",
-                    "mathExpression": "x² - 5x + 6 = 0",
-                    "options": ["x = 2, x = 3", "x = 1, x = 6", "x = -2, x = -3", "x = -1, x = -6"],
-                    "correctAnswer": 0
-                }
-            ];
-        }
-
-        function setupAntiCheating() {
-            let visibilityStartTime = null;
-
-            document.addEventListener('visibilitychange', function() {
-                if (document.hidden) {
-                    visibilityStartTime = new Date();
-                } else if (visibilityStartTime) {
-                    const timeAway = (new Date() - visibilityStartTime) / 1000;
-                    if (timeAway > 2) {
-                        studentData.tabSwitches++;
-                        studentData.cheatingAttempts++;
-                        console.warn("Potential tab switch detected. Cheating attempts:", studentData.cheatingAttempts);
-                    }
-                    visibilityStartTime = null;
-                }
-            });
-
-            document.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-                studentData.cheatingAttempts++;
-                console.warn("Right-click prevented. Cheating attempts:", studentData.cheatingAttempts);
-                return false;
-            });
-
-            // Disable common dev tools shortcuts
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'F12' ||
-                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
-                    (e.ctrlKey && e.key === 'u')) { // Disable Ctrl+U (View Source)
-                    e.preventDefault();
-                    studentData.cheatingAttempts++;
-                    console.warn("Dev tools shortcut blocked. Cheating attempts:", studentData.cheatingAttempts);
-                    return false;
-                }
-            });
-        }
-
-        function startTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-            timeLeft = config.questionTime;
-            updateTimerDisplay();
-            questionStartTime = new Date();
-
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                updateTimerDisplay();
-                if (timeLeft <= 0) {
-                    nextQuestion(); // Automatically move to next question when time runs out
-                }
-            }, 1000);
-        }
-
-        function updateTimerDisplay() {
-            document.getElementById('timer').textContent = timeLeft;
-            if (timeLeft < 10) {
-                document.getElementById('timer').style.color = '#dc3545';
-            } else if (timeLeft < 30) {
-                document.getElementById('timer').style.color = '#fd7e14';
-            }
-        }
-
-        function showQuestion() {
-            if (currentQuestion < 0 || currentQuestion >= quizData.length) {
-                 console.error("Invalid question index:", currentQuestion);
-                 return;
-            }
-            const question = quizData[currentQuestion];
-            const questionText = document.getElementById('question-text');
-            questionText.innerHTML = question.question;
-
-            // Clear any previous math expressions
-            const existingMath = questionText.querySelector('.math-expression');
-            if (existingMath) {
-                existingMath.remove();
-            }
-
-            if (question.mathExpression) {
-                const mathElement = document.createElement('div');
-                mathElement.className = 'math-expression';
-                mathElement.innerHTML = question.mathExpression;
-                questionText.appendChild(mathElement);
-            }
-
-            const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = '';
-
-            question.options.forEach((option, index) => {
-                const optionElement = document.createElement('div');
-                optionElement.className = 'option';
-                if (studentData.answers[currentQuestion] === index) {
-                    optionElement.classList.add('selected');
-                }
-
-                const optionContent = document.createElement('div');
-                optionContent.className = 'math-option';
-
-                const letterSpan = document.createElement('span');
-                letterSpan.className = 'option-letter';
-                letterSpan.textContent = ['A', 'B', 'C', 'D'][index];
-
-                const textSpan = document.createElement('span');
-                if (option.includes('π') || option.includes('∫') || option.includes('√') || option.includes('x =')) {
-                    textSpan.className = 'math-expression';
-                    textSpan.style.background = 'transparent';
-                    textSpan.style.borderLeft = 'none';
-                    textSpan.style.padding = '0';
-                    textSpan.style.margin = '0';
-                }
-                textSpan.innerHTML = option;
-
-                optionContent.appendChild(letterSpan);
-                optionContent.appendChild(textSpan);
-                optionElement.appendChild(optionContent);
-                optionElement.onclick = () => selectAnswer(index);
-                optionsContainer.appendChild(optionElement);
-            });
-
-            updateProgress();
-            updateNavigation();
-            startTimer(); // Start timer for the new question
-        }
-
-        function selectAnswer(answerIndex) {
-            if (studentData.answers[currentQuestion] === answerIndex) {
-                // Deselect if the same option is clicked again
-                studentData.answers[currentQuestion] = null;
-                const options = document.querySelectorAll('.option');
-                options.forEach(option => option.classList.remove('selected'));
-            } else {
-                // Record the new answer and time spent on this question so far
-                const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
-                studentData.timePerQuestion[currentQuestion] = timeSpent;
-                studentData.answers[currentQuestion] = answerIndex;
-
-                const options = document.querySelectorAll('.option');
-                options.forEach((option, index) => {
-                    option.classList.toggle('selected', index === answerIndex);
-                });
-            }
-        }
-
-        function updateProgress() {
-            const progress = ((currentQuestion + 1) / quizData.length) * 100;
-            document.getElementById('progress-fill').style.width = `${progress}%`;
-            document.getElementById('progress-text').textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
-        }
-
-        function updateNavigation() {
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-
-            prevBtn.disabled = currentQuestion === 0;
-            prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
-            prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
-
-            if (currentQuestion === quizData.length - 1) {
-                nextBtn.textContent = 'Submit';
-                nextBtn.className = 'btn-submit';
-            } else {
-                nextBtn.textContent = 'Next';
-                nextBtn.className = 'btn-next';
-            }
-        }
-
-        function previousQuestion() {
-            if (currentQuestion > 0) {
-                // Record time spent on current question before navigating
-                if (questionStartTime) {
-                     const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
-                     studentData.timePerQuestion[currentQuestion] = timeSpent;
-                }
-                clearInterval(timerInterval); // Stop current timer
-                currentQuestion--;
-                showQuestion();
-            }
-        }
-
-        function nextQuestion() {
-            // Record time spent on current question before navigating
-             if (questionStartTime) {
-                 const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
-                 studentData.timePerQuestion[currentQuestion] = timeSpent;
-             }
-             clearInterval(timerInterval); // Stop current timer
-
-            if (currentQuestion < quizData.length - 1) {
-                currentQuestion++;
-                showQuestion();
-            } else {
-                submitQuiz();
-            }
-        }
-
-        async function submitQuiz() {
-            try {
-                // Ensure timer is stopped
-                if (timerInterval) {
-                    clearInterval(timerInterval);
-                }
-                // Record final question time if not already recorded
-                if (questionStartTime && studentData.timePerQuestion[currentQuestion] === 0) {
-                     const timeSpent = Math.round((new Date() - questionStartTime) / 1000);
-                     studentData.timePerQuestion[currentQuestion] = timeSpent;
-                }
-
-                const endTime = new Date();
-                studentData.endTime = endTime;
-                studentData.totalTime = Math.round((endTime - studentData.startTime) / 1000);
-
-                let score = 0;
-                quizData.forEach((question, index) => {
-                    if (studentData.answers[index] === question.correctAnswer) {
-                        score++;
-                    }
-                });
-
-                // Calculate deductions for cheating attempts
-                const totalDeductions = Math.min(studentData.cheatingAttempts * 2, score); // Cap deductions at score
-                let finalScore = Math.max(0, score - totalDeductions);
-
-                studentData.score = score;
-                studentData.finalScore = finalScore;
-                studentData.totalDeductions = totalDeductions;
-                studentData.percentage = quizData.length > 0 ? Math.round((finalScore / quizData.length) * 100) : 0;
-
-                console.log("Submitting data:", JSON.stringify(studentData, null, 2)); // Debug log
-
-                // Show completion screen
-                document.getElementById('quiz-section').style.display = 'none';
-                document.getElementById('completion-section').style.display = 'block';
-
-                // Submit to Google Apps Script
-                await submitToGoogleAppsScript(studentData);
-
-            } catch (error) {
-                console.error('Error during quiz submission:', error);
-                showSubmissionError(error);
-            }
-        }
-
-        async function submitToGoogleAppsScript(data) {
-            const statusElement = document.getElementById('submission-status');
-            const debugElement = document.getElementById('debug-info');
-
-            try {
-                const submissionData = {
-                    action: 'submitQuiz',
-                    timestamp: new Date().toISOString(),
-                    data: data
-                };
-
-                console.log('Submitting data to Google Apps Script:', submissionData);
-
-                // Show debug info
-                debugElement.style.display = 'block';
-                debugElement.innerHTML = `
-                    <strong>Debug Information:</strong><br>
-                    Submitting to: ${config.submitUrl}<br>
-                    Student ID: ${data.studentId}<br>
-                    Score: ${data.score}/${quizData.length}<br>
-                    Data size: ${JSON.stringify(submissionData).length} characters<br>
-                    Cheating Attempts: ${data.cheatingAttempts}
-                `;
-
-                const response = await fetch(config.submitUrl, {
+                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(submissionData)
+                    body: JSON.stringify({
+                        action: 'checkAttempt',
+                        studentId: studentId,
+                        email: email
+                    })
                 });
-
-                console.log('Response status:', response.status);
-
-                if (!response.ok) {
-                    // Try to get error details from response body
-                    let errorMessage = `HTTP error! status: ${response.status}`;
-                    try {
-                        const errorBody = await response.text(); // GAS usually returns JSON, but let's try text first
-                        console.log("Response Text:", errorBody);
-                        // Attempt to parse as JSON if possible
-                        try {
-                            const errorJson = JSON.parse(errorBody);
-                            errorMessage = errorJson.error || errorJson.message || errorMessage;
-                        } catch {
-                            // If not JSON, use the text as the error message
-                            errorMessage = errorBody || errorMessage;
-                        }
-                    } catch (e) {
-                        console.error("Could not read error response body:", e);
-                        // errorMessage remains the HTTP status error
-                    }
-                    throw new Error(errorMessage);
-                }
-
+                
                 const result = await response.json();
-                console.log('Server response:', result);
-
-                if (result.success) {
-                    statusElement.className = 'submission-status submission-success';
-                    statusElement.innerHTML = `
-                        <strong>✓ Data successfully saved to Google Sheets!</strong><br>
-                        <small>Submission ID: ${result.submissionId || 'N/A'}</small><br>
-                        <small>${result.message || 'Data recorded successfully'}</small>
-                    `;
-                    debugElement.innerHTML += `<br><br><strong>Success Response:</strong><br>${JSON.stringify(result, null, 2)}`;
-                } else {
-                    // Server returned success=false
-                    throw new Error(result.error || result.message || 'Unknown server error');
-                }
-
+                return result.hasAttempted || false;
             } catch (error) {
-                console.error('Submission error:', error);
-                statusElement.className = 'submission-status submission-error';
-                statusElement.innerHTML = `
-                    <strong>⚠️ Failed to save to Google Sheets</strong><br>
-                    <small>Error: ${error.message}</small><br>
-                    <small>Check console for details. Data may be saved locally as backup.</small>
-                `;
-                debugElement.innerHTML += `<br><br><strong>Error:</strong> ${error.message}`;
+                console.error('Error checking student attempt:', error);
+                return false;
+            }
+        }
 
-                // Save locally as backup
-                try {
-                    localStorage.setItem('quiz_backup_' + data.studentId, JSON.stringify(data));
-                    console.log('Data saved locally as backup');
-                    statusElement.innerHTML += `<br><small>Data saved locally as backup.</small>`;
-                } catch (lsError) {
-                    console.error("Failed to save backup to localStorage:", lsError);
-                    statusElement.innerHTML += `<br><small>Failed to save backup locally.</small>`;
+        // Save data to Google Sheets
+        async function saveToSheets(data) {
+            try {
+                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                return result.success;
+            } catch (error) {
+                console.error('Error saving to sheets:', error);
+                return false;
+            }
+        }
+
+        // Functions
+        async function startQuiz() {
+            studentName = studentNameInput.value.trim();
+            studentEmail = studentEmailInput.value.trim();
+            studentId = studentIdInput.value.trim();
+            
+            if (!studentName || !studentEmail || !studentId) {
+                showError("Please fill in all fields to start the quiz.");
+                return;
+            }
+            
+            // Validate email format
+            if (!isValidEmail(studentEmail)) {
+                showError("Please enter a valid email address.");
+                return;
+            }
+            
+            // Show loading
+            startQuizBtn.disabled = true;
+            loadingWelcome.classList.add('active');
+            
+            // Check if student has already attempted
+            hasAttempted = await checkStudentAttempt();
+            
+            if (hasAttempted) {
+                showError("You have already attempted this quiz. Each student can only attempt once.");
+                loadingWelcome.classList.remove('active');
+                startQuizBtn.disabled = false;
+                return;
+            }
+            
+            // Generate session ID
+            sessionId = generateSessionId();
+            
+            // Update student display
+            studentDisplay.textContent = `${studentName} (${studentId})`;
+            
+            // Save initial session data
+            const sessionData = {
+                action: 'startSession',
+                sessionId: sessionId,
+                studentName: studentName,
+                studentEmail: studentEmail,
+                studentId: studentId,
+                startTime: new Date().toISOString()
+            };
+            
+            await saveToSheets(sessionData);
+            
+            // Show quiz section
+            welcomeSection.classList.remove('active');
+            quizSection.classList.add('active');
+            
+            // Initialize quiz
+            currentQuestion = 0;
+            score = 0;
+            cheatingAttempts = 0;
+            answers = [];
+            updateCheatingCount();
+            loadQuestion();
+            startTimer();
+            
+            loadingWelcome.classList.remove('active');
+        }
+
+        function loadQuestion() {
+            // Reset UI
+            selectedOption = null;
+            tabSwitched = false;
+            optionsElement.innerHTML = '';
+            warningElement.classList.remove('active');
+            
+            // Update progress
+            const progress = ((currentQuestion) / quizData.length) * 100;
+            progressElement.style.width = `${progress}%`;
+            
+            // Load question data
+            const question = quizData[currentQuestion];
+            questionNumberElement.textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
+            questionTextElement.textContent = question.question;
+            
+            // Create options
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                optionElement.textContent = option;
+                optionElement.dataset.index = index;
+                optionElement.addEventListener('click', selectOption);
+                optionsElement.appendChild(optionElement);
+            });
+            
+            // Reset timer
+            resetTimer();
+        }
+
+        function selectOption(e) {
+            // Deselect previous option
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            
+            // Select new option
+            e.target.classList.add('selected');
+            selectedOption = parseInt(e.target.dataset.index);
+        }
+
+        async function nextQuestion() {
+            if (selectedOption === null) {
+                alert("Please select an answer before proceeding.");
+                return;
+            }
+            
+            // Show loading
+            nextQuestionBtn.disabled = true;
+            loadingQuiz.classList.add('active');
+            
+            // Check if answer is correct
+            const question = quizData[currentQuestion];
+            const isCorrect = selectedOption === question.correct;
+            
+            // Record answer
+            const answerData = {
+                question: question.question,
+                selected: selectedOption,
+                correct: question.correct,
+                isCorrect: isCorrect,
+                timeSpent: 60 - timeLeft,
+                tabSwitched: tabSwitched
+            };
+            
+            answers.push(answerData);
+            
+            // Update score
+            if (isCorrect) {
+                score += 10;
+            }
+            
+            // Deduct points for tab switching
+            if (tabSwitched) {
+                score = Math.max(0, score - 2);
+            }
+            
+            // Save answer to Google Sheets
+            const saveData = {
+                action: 'saveAnswer',
+                sessionId: sessionId,
+                questionNumber: currentQuestion + 1,
+                answerData: answerData,
+                currentScore: score,
+                cheatingAttempts: cheatingAttempts,
+                timestamp: new Date().toISOString()
+            };
+            
+            await saveToSheets(saveData);
+            
+            // Move to next question or finish quiz
+            currentQuestion++;
+            
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+                nextQuestionBtn.disabled = false;
+                loadingQuiz.classList.remove('active');
+            } else {
+                await finishQuiz();
+            }
+        }
+
+        async function finishQuiz() {
+            // Stop timer
+            clearInterval(timer);
+            
+            // Calculate final score
+            const pointsDeducted = cheatingAttempts * 2;
+            const finalScore = Math.max(0, score - pointsDeducted);
+            
+            // Save final results
+            const finalData = {
+                action: 'saveResults',
+                sessionId: sessionId,
+                studentName: studentName,
+                studentEmail: studentEmail,
+                studentId: studentId,
+                finalScore: finalScore,
+                totalQuestions: quizData.length,
+                correctAnswers: answers.filter(a => a.isCorrect).length,
+                cheatingAttempts: cheatingAttempts,
+                pointsDeducted: pointsDeducted,
+                answers: answers,
+                endTime: new Date().toISOString()
+            };
+            
+            const saveSuccess = await saveToSheets(finalData);
+            
+            if (saveSuccess) {
+                // Update results
+                finalScoreElement.textContent = `${finalScore}/${quizData.length * 10}`;
+                summaryNameElement.textContent = studentName;
+                summaryEmailElement.textContent = studentEmail;
+                summaryIdElement.textContent = studentId;
+                summaryTotalElement.textContent = quizData.length;
+                summaryCorrectElement.textContent = answers.filter(a => a.isCorrect).length;
+                summaryCheatingElement.textContent = cheatingAttempts;
+                summaryDeductedElement.textContent = pointsDeducted;
+                summaryFinalElement.textContent = finalScore;
+                
+                // Show results section
+                quizSection.classList.remove('active');
+                resultsSection.classList.add('active');
+            } else {
+                showError("There was an error saving your results. Please contact your instructor.");
+            }
+            
+            loadingQuiz.classList.remove('active');
+            nextQuestionBtn.disabled = false;
+        }
+
+        function startTimer() {
+            resetTimer();
+            timer = setInterval(updateTimer, 1000);
+        }
+
+        function resetTimer() {
+            timeLeft = 60;
+            updateTimerDisplay();
+        }
+
+        function updateTimer() {
+            timeLeft--;
+            updateTimerDisplay();
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                // Auto-submit if time runs out
+                if (selectedOption === null) {
+                    selectedOption = -1; // No answer selected
+                }
+                nextQuestion();
+            }
+        }
+
+        function updateTimerDisplay() {
+            timerElement.textContent = `${timeLeft}s`;
+            
+            // Change color when time is running out
+            if (timeLeft <= 10) {
+                timerElement.style.color = '#dc2626';
+            }
+        }
+
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                // User switched tabs
+                cheatingAttempts++;
+                tabSwitched = true;
+                updateCheatingCount();
+                
+                // Show warning
+                warningElement.classList.add('active');
+                
+                // Save cheating attempt
+                saveToSheets({
+                    action: 'cheatingAttempt',
+                    sessionId: sessionId,
+                    attemptNumber: cheatingAttempts,
+                    timestamp: new Date().toISOString(),
+                    type: 'tabSwitch'
+                });
+                
+                // Terminate quiz if too many cheating attempts
+                if (cheatingAttempts >= 6) {
+                    alert("Quiz terminated due to excessive cheating attempts.");
+                    finishQuiz();
                 }
             }
         }
 
-
-        function showSubmissionError(error) {
-            const statusElement = document.getElementById('submission-status');
-            statusElement.className = 'submission-status submission-error';
-            statusElement.innerHTML = `
-                <strong>⚠️ Submission Error</strong><br>
-                <small>${error.message}</small><br>
-                <small>Your data may have been saved locally.</small>
-            `;
-            // Attempt to save backup if not already done in submitToGoogleAppsScript
-             if (typeof localStorage !== 'undefined') {
-                 try {
-                     localStorage.setItem('quiz_backup_' + studentData.studentId, JSON.stringify(studentData));
-                     console.log('Data saved locally as backup in error handler');
-                 } catch (e) {
-                     console.error("Failed to save backup in error handler:", e);
-                 }
-             }
+        function updateCheatingCount() {
+            cheatingCountElement.textContent = cheatingAttempts;
         }
 
-        function generateStudentId() {
-            return 'S' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('active');
+            setTimeout(() => {
+                errorMessage.classList.remove('active');
+            }, 5000);
         }
 
-        // Initialize when page loads
-        window.onload = initQuiz;
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Anti-cheating functions
+        function preventCopy(e) {
+            e.preventDefault();
+            alert("Copying text is not allowed during the quiz.");
+            cheatingAttempts++;
+            updateCheatingCount();
+            saveToSheets({
+                action: 'cheatingAttempt',
+                sessionId: sessionId,
+                attemptNumber: cheatingAttempts,
+                timestamp: new Date().toISOString(),
+                type: 'copyAttempt'
+            });
+            return false;
+        }
+
+        function preventRightClick(e) {
+            e.preventDefault();
+            alert("Right-click is disabled during the quiz.");
+            cheatingAttempts++;
+            updateCheatingCount();
+            saveToSheets({
+                action: 'cheatingAttempt',
+                sessionId: sessionId,
+                attemptNumber: cheatingAttempts,
+                timestamp: new Date().toISOString(),
+                type: 'rightClickAttempt'
+            });
+            return false;
+        }
+
+        function preventScreenshot(e) {
+            // Prevent common screenshot shortcuts
+            if ((e.ctrlKey && e.key === 'PrintScreen') || 
+                (e.key === 'PrintScreen') || 
+                (e.metaKey && e.shiftKey && e.key === '3') || 
+                (e.metaKey && e.shiftKey && e.key === '4')) {
+                e.preventDefault();
+                alert("Screenshots are not allowed during the quiz.");
+                cheatingAttempts++;
+                updateCheatingCount();
+                saveToSheets({
+                    action: 'cheatingAttempt',
+                    sessionId: sessionId,
+                    attemptNumber: cheatingAttempts,
+                    timestamp: new Date().toISOString(),
+                    type: 'screenshotAttempt'
+                });
+                return false;
+            }
+        }
     </script>
 </body>
 </html>
