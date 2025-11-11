@@ -330,6 +330,20 @@
         .success-message.active {
             display: block;
         }
+        
+        .debug-info {
+            background-color: #f3f4f6;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 16px;
+            font-size: 12px;
+            color: #6b7280;
+            display: none;
+        }
+        
+        .debug-info.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -354,6 +368,7 @@
             
             <div class="error-message" id="error-message"></div>
             <div class="success-message" id="success-message"></div>
+            <div class="debug-info" id="debug-info"></div>
             
             <div class="form-group">
                 <label for="student-name">Full Name *</label>
@@ -371,6 +386,7 @@
             </div>
             
             <button id="start-quiz" class="btn">Start Quiz</button>
+            <button id="test-connection" class="btn" style="background-color: #059669; margin-top: 10px;">Test Connection First</button>
             
             <div class="loading" id="loading-welcome">
                 <p>Verifying your access...</p>
@@ -477,7 +493,7 @@
     </div>
 
     <script>
-        // 🔧 CONFIGURATION - REPLACE WITH YOUR GOOGLE APPS SCRIPT URL
+        // 🔧 CONFIGURATION - YOUR CORRECTED GOOGLE APPS SCRIPT URL
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3vd2wAcmlnnZP6HsZel2qSART2BU912SGswaXZOjcJMXr96-xJjcFwKOxid1iyYC0/exec';
         
         // Quiz data
@@ -518,6 +534,7 @@
         const studentIdInput = document.getElementById('student-id');
         const studentDisplay = document.getElementById('student-display');
         const startQuizBtn = document.getElementById('start-quiz');
+        const testConnectionBtn = document.getElementById('test-connection');
         const nextQuestionBtn = document.getElementById('next-question');
         const timerElement = document.getElementById('timer');
         const warningElement = document.getElementById('warning');
@@ -537,6 +554,7 @@
         const summaryFinalElement = document.getElementById('summary-final');
         const errorMessage = document.getElementById('error-message');
         const successMessage = document.getElementById('success-message');
+        const debugInfo = document.getElementById('debug-info');
         const loadingWelcome = document.getElementById('loading-welcome');
         const loadingQuiz = document.getElementById('loading-quiz');
         const loadingResults = document.getElementById('loading-results');
@@ -558,15 +576,31 @@
 
         // Event listeners
         startQuizBtn.addEventListener('click', startQuiz);
+        testConnectionBtn.addEventListener('click', testConnection);
         nextQuestionBtn.addEventListener('click', nextQuestion);
 
-        // Anti-cheating measures
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        document.addEventListener('copy', preventCopy);
-        document.addEventListener('cut', preventCopy);
-        document.addEventListener('paste', preventCopy);
-        document.addEventListener('contextmenu', preventRightClick);
-        document.addEventListener('keydown', preventScreenshot);
+        // Test connection function
+        async function testConnection() {
+            console.log('Testing connection to:', GOOGLE_APPS_SCRIPT_URL);
+            showDebug('Testing connection to Google Apps Script...');
+            
+            try {
+                const response = await fetch(GOOGLE_APPS_SCRIPT_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                showDebug('Connection successful! Response: ' + JSON.stringify(result));
+                showSuccess('✅ Connection successful! Script is working properly.');
+                
+            } catch (error) {
+                console.error('Connection test failed:', error);
+                showDebug('Connection test failed: ' + error.message);
+                showError('❌ Connection failed. Please check your script URL and deployment settings.');
+            }
+        }
 
         // Generate unique session ID
         function generateSessionId() {
@@ -581,7 +615,7 @@
             if (!studentId || !email) return false;
             
             try {
-                console.log('Checking student attempt...');
+                showDebug('Checking if student has already attempted...');
                 const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
                     method: 'POST',
                     headers: {
@@ -594,11 +628,16 @@
                     })
                 });
                 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const result = await response.json();
-                console.log('Check attempt result:', result);
+                showDebug('Check attempt response: ' + JSON.stringify(result));
                 return result.hasAttempted || false;
             } catch (error) {
                 console.error('Error checking student attempt:', error);
+                showDebug('Error checking attempt: ' + error.message);
                 showError('Network error. Please check your connection and try again.');
                 return false;
             }
@@ -607,7 +646,7 @@
         // Save data to Google Sheets
         async function saveToSheets(data) {
             try {
-                console.log('Saving to sheets:', data);
+                showDebug('Sending data to Google Sheets: ' + JSON.stringify(data));
                 const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
                     method: 'POST',
                     headers: {
@@ -616,11 +655,16 @@
                     body: JSON.stringify(data)
                 });
                 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const result = await response.json();
-                console.log('Save result:', result);
+                showDebug('Save response: ' + JSON.stringify(result));
                 return result.success;
             } catch (error) {
                 console.error('Error saving to sheets:', error);
+                showDebug('Save error: ' + error.message);
                 showError('Failed to save data. Please try again.');
                 return false;
             }
@@ -646,6 +690,7 @@
             // Show loading
             startQuizBtn.disabled = true;
             loadingWelcome.classList.add('active');
+            showDebug('Starting quiz for: ' + studentName);
             
             // Check if student has already attempted
             hasAttempted = await checkStudentAttempt();
@@ -659,6 +704,7 @@
             
             // Generate session ID
             sessionId = generateSessionId();
+            showDebug('Generated session ID: ' + sessionId);
             
             // Update student display
             studentDisplay.textContent = `${studentName} (${studentId})`;
@@ -932,6 +978,12 @@
             }, 3000);
         }
 
+        function showDebug(message) {
+            debugInfo.textContent = 'Debug: ' + message;
+            debugInfo.classList.add('active');
+            console.log('Debug:', message);
+        }
+
         function isValidEmail(email) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
@@ -993,6 +1045,7 @@
         window.addEventListener('load', function() {
             console.log('Quiz system loaded');
             console.log('Google Apps Script URL:', GOOGLE_APPS_SCRIPT_URL);
+            showDebug('System loaded. Script URL: ' + GOOGLE_APPS_SCRIPT_URL);
         });
     </script>
 </body>
