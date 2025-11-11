@@ -296,6 +296,7 @@
             display: none;
             text-align: center;
             padding: 20px;
+            color: #6b7280;
         }
         
         .loading.active {
@@ -313,6 +314,20 @@
         }
         
         .error-message.active {
+            display: block;
+        }
+        
+        .success-message {
+            background-color: #f0fdf4;
+            color: #166534;
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success-message.active {
             display: block;
         }
     </style>
@@ -338,19 +353,20 @@
             </div>
             
             <div class="error-message" id="error-message"></div>
+            <div class="success-message" id="success-message"></div>
             
             <div class="form-group">
-                <label for="student-name">Full Name</label>
+                <label for="student-name">Full Name *</label>
                 <input type="text" id="student-name" placeholder="Enter your full name" required>
             </div>
             
             <div class="form-group">
-                <label for="student-email">Email Address</label>
+                <label for="student-email">Email Address *</label>
                 <input type="email" id="student-email" placeholder="Enter your email address" required>
             </div>
             
             <div class="form-group">
-                <label for="student-id">Student ID</label>
+                <label for="student-id">Student ID *</label>
                 <input type="text" id="student-id" placeholder="Enter your student ID" required>
             </div>
             
@@ -461,7 +477,7 @@
     </div>
 
     <script>
-        // Configuration - UPDATE THESE WITH YOUR GOOGLE APPS SCRIPT URL
+        // 🔧 CONFIGURATION - REPLACE WITH YOUR GOOGLE APPS SCRIPT URL
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3vd2wAcmlnnZP6HsZel2qSART2BU912SGswaXZOjcJMXr96-xJjcFwKOxid1iyYC0/exec';
         
         // Quiz data
@@ -520,6 +536,7 @@
         const summaryDeductedElement = document.getElementById('summary-deducted');
         const summaryFinalElement = document.getElementById('summary-final');
         const errorMessage = document.getElementById('error-message');
+        const successMessage = document.getElementById('success-message');
         const loadingWelcome = document.getElementById('loading-welcome');
         const loadingQuiz = document.getElementById('loading-quiz');
         const loadingResults = document.getElementById('loading-results');
@@ -564,6 +581,7 @@
             if (!studentId || !email) return false;
             
             try {
+                console.log('Checking student attempt...');
                 const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
                     method: 'POST',
                     headers: {
@@ -572,14 +590,16 @@
                     body: JSON.stringify({
                         action: 'checkAttempt',
                         studentId: studentId,
-                        email: email
+                        studentEmail: email
                     })
                 });
                 
                 const result = await response.json();
+                console.log('Check attempt result:', result);
                 return result.hasAttempted || false;
             } catch (error) {
                 console.error('Error checking student attempt:', error);
+                showError('Network error. Please check your connection and try again.');
                 return false;
             }
         }
@@ -587,6 +607,7 @@
         // Save data to Google Sheets
         async function saveToSheets(data) {
             try {
+                console.log('Saving to sheets:', data);
                 const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
                     method: 'POST',
                     headers: {
@@ -596,9 +617,11 @@
                 });
                 
                 const result = await response.json();
+                console.log('Save result:', result);
                 return result.success;
             } catch (error) {
                 console.error('Error saving to sheets:', error);
+                showError('Failed to save data. Please try again.');
                 return false;
             }
         }
@@ -650,7 +673,14 @@
                 startTime: new Date().toISOString()
             };
             
-            await saveToSheets(sessionData);
+            const sessionSaved = await saveToSheets(sessionData);
+            
+            if (!sessionSaved) {
+                showError("Failed to start quiz session. Please try again.");
+                loadingWelcome.classList.remove('active');
+                startQuizBtn.disabled = false;
+                return;
+            }
             
             // Show quiz section
             welcomeSection.classList.remove('active');
@@ -666,6 +696,7 @@
             startTimer();
             
             loadingWelcome.classList.remove('active');
+            showSuccess("Quiz started successfully! Good luck!");
         }
 
         function loadQuestion() {
@@ -793,7 +824,9 @@
                 endTime: new Date().toISOString()
             };
             
+            loadingResults.classList.add('active');
             const saveSuccess = await saveToSheets(finalData);
+            loadingResults.classList.remove('active');
             
             if (saveSuccess) {
                 // Update results
@@ -810,11 +843,12 @@
                 // Show results section
                 quizSection.classList.remove('active');
                 resultsSection.classList.add('active');
+                
+                showSuccess("Your results have been saved successfully!");
             } else {
                 showError("There was an error saving your results. Please contact your instructor.");
             }
             
-            loadingQuiz.classList.remove('active');
             nextQuestionBtn.disabled = false;
         }
 
@@ -890,6 +924,14 @@
             }, 5000);
         }
 
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.classList.add('active');
+            setTimeout(() => {
+                successMessage.classList.remove('active');
+            }, 3000);
+        }
+
         function isValidEmail(email) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
@@ -946,6 +988,12 @@
                 return false;
             }
         }
+
+        // Test connection on load
+        window.addEventListener('load', function() {
+            console.log('Quiz system loaded');
+            console.log('Google Apps Script URL:', GOOGLE_APPS_SCRIPT_URL);
+        });
     </script>
 </body>
 </html>
