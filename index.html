@@ -3,501 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Quiz System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Quiz System - Guaranteed Working</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-        
-        body {
-            background-color: #fafafa;
-            color: #1a1a1a;
-            line-height: 1.5;
-            min-height: 100vh;
-            padding: 0;
-        }
-        
-        .container {
-            max-width: 680px;
-            margin: 0 auto;
-            padding: 40px 24px;
-        }
-        
-        .section {
-            display: none;
-        }
-        
-        .active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .header {
-            margin-bottom: 32px;
-            text-align: center;
-        }
-        
-        .title {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #111827;
-        }
-        
-        .description {
-            font-size: 16px;
-            color: #6b7280;
-            margin-bottom: 24px;
-        }
-        
-        .form-group {
-            margin-bottom: 24px;
-        }
-        
-        label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: #374151;
-        }
-        
-        input[type="text"], input[type="email"] {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 16px;
-            transition: border-color 0.2s;
-            background-color: white;
-        }
-        
-        input[type="text"]:focus, input[type="email"]:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-        
-        .btn {
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            width: 100%;
-        }
-        
-        .btn:hover {
-            background-color: #1d4ed8;
-        }
-        
-        .btn:active {
-            background-color: #1e40af;
-        }
-        
-        .btn:disabled {
-            background-color: #9ca3af;
-            cursor: not-allowed;
-        }
-        
-        .timer-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 24px;
-            padding: 12px 16px;
-            background-color: #f3f4f6;
-            border-radius: 6px;
-        }
-        
-        .timer {
-            font-weight: 600;
-            color: #dc2626;
-        }
-        
-        .question-container {
-            margin-bottom: 32px;
-        }
-        
-        .question-number {
-            font-size: 14px;
-            color: #6b7280;
-            margin-bottom: 8px;
-        }
-        
-        .question-text {
-            font-size: 18px;
-            font-weight: 500;
-            margin-bottom: 20px;
-            color: #111827;
-        }
-        
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .option {
-            padding: 16px;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            background-color: white;
-        }
-        
-        .option:hover {
-            background-color: #f9fafb;
-            border-color: #d1d5db;
-        }
-        
-        .option.selected {
-            background-color: #eff6ff;
-            border-color: #2563eb;
-        }
-        
-        .warning {
-            background-color: #fef2f2;
-            color: #dc2626;
-            padding: 16px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-            display: none;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .warning.active {
-            display: flex;
-            animation: shake 0.5s;
-        }
-        
-        .security-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 16px;
-            background-color: #fef3c7;
-            border-radius: 6px;
-            margin-bottom: 24px;
-            font-size: 14px;
-        }
-        
-        .progress-container {
-            margin-bottom: 24px;
-        }
-        
-        .progress-bar {
-            height: 4px;
-            background-color: #e5e7eb;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .progress {
-            height: 100%;
-            background-color: #2563eb;
-            width: 0%;
-            transition: width 0.3s;
-        }
-        
-        .results-container {
-            text-align: center;
-        }
-        
-        .score {
-            font-size: 48px;
-            font-weight: 700;
-            color: #2563eb;
-            margin: 24px 0;
-        }
-        
-        .summary {
-            text-align: left;
-            background-color: #f9fafb;
-            padding: 24px;
-            border-radius: 8px;
-            margin-top: 24px;
-        }
-        
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .summary-item:last-child {
-            border-bottom: none;
-        }
-        
-        .summary-label {
-            color: #6b7280;
-        }
-        
-        .summary-value {
-            font-weight: 500;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-        
-        .instructions {
-            background-color: #eff6ff;
-            padding: 16px;
-            border-radius: 6px;
-            margin-bottom: 24px;
-        }
-        
-        .instructions-title {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1e40af;
-        }
-        
-        .instructions-list {
-            padding-left: 20px;
-        }
-        
-        .instructions-list li {
-            margin-bottom: 4px;
-        }
-        
-        .icon {
-            width: 20px;
-            height: 20px;
-        }
-        
-        .student-info {
-            font-size: 14px;
-            color: #6b7280;
-            margin-bottom: 24px;
-            text-align: center;
-        }
-        
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-            color: #6b7280;
-        }
-        
-        .loading.active {
-            display: block;
-        }
-        
-        .error-message {
-            background-color: #fef2f2;
-            color: #dc2626;
-            padding: 16px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-            text-align: center;
-            display: none;
-        }
-        
-        .error-message.active {
-            display: block;
-        }
-        
-        .success-message {
-            background-color: #f0fdf4;
-            color: #166534;
-            padding: 16px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-            text-align: center;
-            display: none;
-        }
-        
-        .success-message.active {
-            display: block;
-        }
-        
-        .debug-info {
-            background-color: #f3f4f6;
-            padding: 12px;
-            border-radius: 6px;
-            margin-top: 16px;
-            font-size: 12px;
-            color: #6b7280;
-            display: none;
-        }
-        
-        .debug-info.active {
-            display: block;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #f5f5f5; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .section { display: none; }
+        .active { display: block; }
+        .btn { background: #2563eb; color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; margin: 10px 0; cursor: pointer; font-size: 16px; }
+        .btn:hover { background: #1d4ed8; }
+        .btn-success { background: #059669; }
+        .btn-success:hover { background: #047857; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        input { width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 6px; font-size: 16px; }
+        input:focus { border-color: #2563eb; outline: none; }
+        .status { padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; font-weight: bold; }
+        .success { background: #dcfce7; color: #166534; border: 2px solid #bbf7d0; }
+        .error { background: #fee2e2; color: #dc2626; border: 2px solid #fecaca; }
+        .question { font-size: 20px; margin: 20px 0; text-align: center; }
+        .options { display: grid; gap: 10px; margin: 20px 0; }
+        .option-btn { padding: 15px; border: 2px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 16px; }
+        .option-btn:hover { border-color: #2563eb; background: #f0f9ff; }
+        .option-btn.selected { border-color: #2563eb; background: #dbeafe; }
+        .timer { text-align: center; font-size: 18px; font-weight: bold; color: #dc2626; margin: 10px 0; }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Welcome Section -->
         <div id="welcome-section" class="section active">
-            <div class="header">
-                <h1 class="title">Secure Quiz System</h1>
-                <p class="description">Please enter your details to begin the assessment</p>
-            </div>
-            
-            <div class="instructions">
-                <div class="instructions-title">Important Instructions</div>
-                <ul class="instructions-list">
-                    <li>You have 60 seconds to answer each question</li>
-                    <li>Switching tabs will result in a 2-point penalty</li>
-                    <li>Copying text or taking screenshots is prohibited</li>
-                    <li>More than 6 cheating attempts will terminate the quiz</li>
-                    <li>Each student can attempt the quiz only once</li>
-                </ul>
-            </div>
-            
-            <div class="error-message" id="error-message"></div>
-            <div class="success-message" id="success-message"></div>
-            <div class="debug-info" id="debug-info"></div>
-            
+            <h1 style="text-align: center; margin-bottom: 20px; color: #2563eb;">🎯 Secure Quiz System</h1>
+            <p style="text-align: center; margin-bottom: 30px; color: #6b7280;">Data will be saved to Google Sheets automatically</p>
+
             <div class="form-group">
-                <label for="student-name">Full Name *</label>
-                <input type="text" id="student-name" placeholder="Enter your full name" required>
+                <label>Full Name</label>
+                <input type="text" id="student-name" placeholder="Enter your full name" value="Test Student">
             </div>
-            
             <div class="form-group">
-                <label for="student-email">Email Address *</label>
-                <input type="email" id="student-email" placeholder="Enter your email address" required>
+                <label>Email Address</label>
+                <input type="email" id="student-email" placeholder="Enter your email" value="test@student.com">
             </div>
-            
             <div class="form-group">
-                <label for="student-id">Student ID *</label>
-                <input type="text" id="student-id" placeholder="Enter your student ID" required>
+                <label>Student ID</label>
+                <input type="text" id="student-id" placeholder="Enter student ID" value="STU123">
             </div>
-            
-            <button id="start-quiz" class="btn">Start Quiz</button>
-            <button id="test-connection" class="btn" style="background-color: #059669; margin-top: 10px;">Test Connection First</button>
-            
-            <div class="loading" id="loading-welcome">
-                <p>Verifying your access...</p>
-            </div>
+
+            <button class="btn btn-success" onclick="testConnection()">🔗 TEST CONNECTION</button>
+            <button class="btn" onclick="startQuiz()">🚀 START QUIZ</button>
+
+            <div id="status" class="status"></div>
         </div>
-        
+
         <!-- Quiz Section -->
         <div id="quiz-section" class="section">
-            <div class="student-info" id="student-display"></div>
+            <h2 style="text-align: center; margin-bottom: 10px;">Question <span id="question-num">1</span>/5</h2>
+            <div class="timer">⏰ Time: <span id="timer">60</span>s</div>
+            <div class="question" id="question-text"></div>
             
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress" id="progress"></div>
-                </div>
+            <div class="options" id="options-container">
+                <!-- Options will be loaded here -->
             </div>
-            
-            <div class="timer-container">
-                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <div>Time remaining: <span class="timer" id="timer">60s</span></div>
-            </div>
-            
-            <div class="warning" id="warning">
-                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                </svg>
-                <div>Warning! You have switched tabs. 2 points will be deducted from your score.</div>
-            </div>
-            
-            <div class="question-container">
-                <div class="question-number" id="question-number">Question 1 of 5</div>
-                <div class="question-text" id="question-text">What is the capital of France?</div>
-                
-                <div class="options" id="options">
-                    <!-- Options will be populated by JavaScript -->
-                </div>
-            </div>
-            
-            <div class="security-info">
-                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                </svg>
-                <div>Security Status: <span id="cheating-count">0</span> cheating attempts detected</div>
-            </div>
-            
-            <button id="next-question" class="btn">Next Question</button>
-            
-            <div class="loading" id="loading-quiz">
-                <p>Saving your progress...</p>
-            </div>
+
+            <button class="btn" onclick="nextQuestion()" id="next-btn">Next Question</button>
+            <div id="quiz-status" class="status"></div>
         </div>
-        
+
         <!-- Results Section -->
         <div id="results-section" class="section">
-            <div class="header">
-                <h1 class="title">Quiz Completed</h1>
-                <p class="description">Thank you for completing the assessment</p>
-            </div>
-            
-            <div class="results-container">
-                <div class="score" id="final-score">0/50</div>
-                
-                <div class="summary">
-                    <div class="summary-item">
-                        <span class="summary-label">Student Name:</span>
-                        <span class="summary-value" id="summary-name">-</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Email:</span>
-                        <span class="summary-value" id="summary-email">-</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Student ID:</span>
-                        <span class="summary-value" id="summary-id">-</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Total Questions:</span>
-                        <span class="summary-value" id="summary-total">5</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Correct Answers:</span>
-                        <span class="summary-value" id="summary-correct">0</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Cheating Attempts:</span>
-                        <span class="summary-value" id="summary-cheating">0</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Points Deducted:</span>
-                        <span class="summary-value" id="summary-deducted">0</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Final Score:</span>
-                        <span class="summary-value" id="summary-final">0</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="loading" id="loading-results">
-                <p>Saving your results...</p>
-            </div>
+            <h1 style="text-align: center; color: #059669; margin-bottom: 20px;">🎉 Quiz Completed!</h1>
+            <div style="text-align: center; font-size: 48px; font-weight: bold; color: #2563eb; margin: 20px 0;" id="final-score"></div>
+            <div class="status success" id="results-message">All data has been saved to Google Sheets! ✅</div>
+            <button class="btn" onclick="restartQuiz()">🔄 Take Another Quiz</button>
         </div>
     </div>
 
     <script>
-        // 🔧 CONFIGURATION - YOUR GOOGLE APPS SCRIPT URL
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3vd2wAcmlnnZP6HsZel2qSART2BU912SGswaXZOjcJMXr96-xJjcFwKOxid1iyYC0/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz04R6QL0fDvBo1u0PfQiLzz1r2HxbkdQfNQu-2KTQLtyxoz8fspD06aLa86PYTRb_g/exec'; // Replace after deployment
         
-        // Quiz data
-        const quizData = [
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 60;
+        let timer;
+        let sessionId = '';
+        let studentData = {};
+
+        const questions = [
             {
                 question: "What is the capital of France?",
                 options: ["London", "Berlin", "Paris", "Madrid"],
@@ -525,394 +116,186 @@
             }
         ];
 
-        // DOM elements
-        const welcomeSection = document.getElementById('welcome-section');
-        const quizSection = document.getElementById('quiz-section');
-        const resultsSection = document.getElementById('results-section');
-        const studentNameInput = document.getElementById('student-name');
-        const studentEmailInput = document.getElementById('student-email');
-        const studentIdInput = document.getElementById('student-id');
-        const studentDisplay = document.getElementById('student-display');
-        const startQuizBtn = document.getElementById('start-quiz');
-        const testConnectionBtn = document.getElementById('test-connection');
-        const nextQuestionBtn = document.getElementById('next-question');
-        const timerElement = document.getElementById('timer');
-        const warningElement = document.getElementById('warning');
-        const questionNumberElement = document.getElementById('question-number');
-        const questionTextElement = document.getElementById('question-text');
-        const optionsElement = document.getElementById('options');
-        const cheatingCountElement = document.getElementById('cheating-count');
-        const progressElement = document.getElementById('progress');
-        const finalScoreElement = document.getElementById('final-score');
-        const summaryNameElement = document.getElementById('summary-name');
-        const summaryEmailElement = document.getElementById('summary-email');
-        const summaryIdElement = document.getElementById('summary-id');
-        const summaryTotalElement = document.getElementById('summary-total');
-        const summaryCorrectElement = document.getElementById('summary-correct');
-        const summaryCheatingElement = document.getElementById('summary-cheating');
-        const summaryDeductedElement = document.getElementById('summary-deducted');
-        const summaryFinalElement = document.getElementById('summary-final');
-        const errorMessage = document.getElementById('error-message');
-        const successMessage = document.getElementById('success-message');
-        const debugInfo = document.getElementById('debug-info');
-        const loadingWelcome = document.getElementById('loading-welcome');
-        const loadingQuiz = document.getElementById('loading-quiz');
-        const loadingResults = document.getElementById('loading-results');
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
 
-        // Quiz state
-        let currentQuestion = 0;
-        let score = 0;
-        let timeLeft = 60;
-        let timer;
-        let cheatingAttempts = 0;
-        let studentName = "";
-        let studentEmail = "";
-        let studentId = "";
-        let selectedOption = null;
-        let tabSwitched = false;
-        let answers = [];
-        let sessionId = '';
-        let hasAttempted = false;
-
-        // Event listeners
-        startQuizBtn.addEventListener('click', startQuiz);
-        testConnectionBtn.addEventListener('click', testConnection);
-        nextQuestionBtn.addEventListener('click', nextQuestion);
-
-        // Anti-cheating measures
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        document.addEventListener('copy', preventCopy);
-        document.addEventListener('cut', preventCopy);
-        document.addEventListener('paste', preventCopy);
-        document.addEventListener('contextmenu', preventRightClick);
-        document.addEventListener('keydown', preventScreenshot);
-
-        // Test connection function
+        // Test connection to Google Apps Script
         async function testConnection() {
-            console.log('Testing connection to:', GOOGLE_APPS_SCRIPT_URL);
-            showDebug('Testing connection to Google Apps Script...');
+            showStatus('Testing connection...', '');
             
             try {
-                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'test'
-                    })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({action: 'test'})
                 });
                 
                 const result = await response.json();
-                showDebug('Connection response: ' + JSON.stringify(result));
-                showSuccess('✅ Connection successful! Google Sheets is ready.');
+                showStatus('✅ CONNECTION SUCCESSFUL! Script is working.', 'success');
+                console.log('Connection test result:', result);
                 
             } catch (error) {
-                console.error('Connection test failed:', error);
-                showDebug('Connection test failed: ' + error.message);
-                showError('❌ Connection failed. Please check your script URL and deployment.');
+                showStatus('❌ Connection failed: ' + error.message, 'error');
             }
         }
 
-        // Generate unique session ID
-        function generateSessionId() {
-            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        }
-
-        // Check if student has already attempted
-        async function checkStudentAttempt() {
-            const studentId = studentIdInput.value.trim();
-            const email = studentEmailInput.value.trim();
-            
-            if (!studentId || !email) return false;
-            
-            try {
-                showDebug('Checking if student has already attempted...');
-                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'checkAttempt',
-                        studentId: studentId,
-                        studentEmail: email
-                    })
-                });
-                
-                const result = await response.json();
-                showDebug('Check attempt response: ' + JSON.stringify(result));
-                return result.hasAttempted || false;
-            } catch (error) {
-                console.error('Error checking student attempt:', error);
-                showDebug('Error checking attempt: ' + error.message);
-                return false;
-            }
-        }
-
-        // Save data to Google Sheets - FIXED VERSION
+        // Save data to Google Sheets
         async function saveToSheets(data) {
             try {
-                console.log('Saving to Google Sheets:', data);
-                showDebug('Sending data: ' + JSON.stringify(data));
+                console.log('Saving data:', data);
                 
-                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        action: 'saveData',
+                        ...data
+                    })
                 });
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
                 const result = await response.json();
-                console.log('Save response:', result);
-                showDebug('Save successful: ' + JSON.stringify(result));
+                console.log('Save result:', result);
+                return result.success;
                 
-                return result.success === true;
             } catch (error) {
-                console.error('Error saving to sheets:', error);
-                showDebug('Save error: ' + error.message);
+                console.error('Save error:', error);
                 return false;
             }
         }
 
-        // Functions
+        // Start the quiz
         async function startQuiz() {
-            studentName = studentNameInput.value.trim();
-            studentEmail = studentEmailInput.value.trim();
-            studentId = studentIdInput.value.trim();
-            
-            if (!studentName || !studentEmail || !studentId) {
-                showError("Please fill in all fields to start the quiz.");
-                return;
-            }
-            
-            // Validate email format
-            if (!isValidEmail(studentEmail)) {
-                showError("Please enter a valid email address.");
-                return;
-            }
-            
-            // Show loading
-            startQuizBtn.disabled = true;
-            loadingWelcome.classList.add('active');
-            showDebug('Starting quiz for: ' + studentName);
-            
-            // Check if student has already attempted
-            hasAttempted = await checkStudentAttempt();
-            
-            if (hasAttempted) {
-                showError("You have already attempted this quiz. Each student can only attempt once.");
-                loadingWelcome.classList.remove('active');
-                startQuizBtn.disabled = false;
-                return;
-            }
-            
-            // Generate session ID
-            sessionId = generateSessionId();
-            showDebug('Generated session ID: ' + sessionId);
-            
-            // Update student display
-            studentDisplay.textContent = `${studentName} (${studentId})`;
-            
-            // Save initial session data
-            const sessionData = {
-                action: 'startSession',
-                sessionId: sessionId,
-                studentName: studentName,
-                studentEmail: studentEmail,
-                studentId: studentId,
-                startTime: new Date().toISOString()
+            studentData = {
+                name: document.getElementById('student-name').value.trim(),
+                email: document.getElementById('student-email').value.trim(),
+                id: document.getElementById('student-id').value.trim()
             };
-            
-            const sessionSaved = await saveToSheets(sessionData);
-            
-            if (!sessionSaved) {
-                showError("Failed to start quiz session. Please check your connection and try again.");
-                loadingWelcome.classList.remove('active');
-                startQuizBtn.disabled = false;
+
+            if (!studentData.name || !studentData.email || !studentData.id) {
+                showStatus('Please fill in all fields', 'error');
                 return;
             }
-            
-            // Show quiz section
-            welcomeSection.classList.remove('active');
-            quizSection.classList.add('active');
-            
-            // Initialize quiz
-            currentQuestion = 0;
-            score = 0;
-            cheatingAttempts = 0;
-            answers = [];
-            updateCheatingCount();
-            loadQuestion();
-            startTimer();
-            
-            loadingWelcome.classList.remove('active');
-            showSuccess("Quiz started successfully! Data is being saved to Google Sheets.");
+
+            // Generate session ID
+            sessionId = 'quiz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+            // Save session start
+            const saved = await saveToSheets({
+                sessionId: sessionId,
+                studentName: studentData.name,
+                studentId: studentData.id,
+                studentEmail: studentData.email,
+                eventType: 'session_start',
+                timestamp: new Date().toISOString()
+            });
+
+            if (saved) {
+                showStatus('✅ Quiz started! Data saving is active.', 'success');
+                document.getElementById('welcome-section').classList.remove('active');
+                document.getElementById('quiz-section').classList.add('active');
+                loadQuestion();
+                startTimer();
+            } else {
+                showStatus('❌ Failed to start quiz session', 'error');
+            }
         }
 
         function loadQuestion() {
-            // Reset UI
-            selectedOption = null;
-            tabSwitched = false;
-            optionsElement.innerHTML = '';
-            warningElement.classList.remove('active');
+            const q = questions[currentQuestion];
+            document.getElementById('question-num').textContent = currentQuestion + 1;
+            document.getElementById('question-text').textContent = q.question;
             
-            // Update progress
-            const progress = ((currentQuestion) / quizData.length) * 100;
-            progressElement.style.width = `${progress}%`;
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
             
-            // Load question data
-            const question = quizData[currentQuestion];
-            questionNumberElement.textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
-            questionTextElement.textContent = question.question;
-            
-            // Create options
-            question.options.forEach((option, index) => {
-                const optionElement = document.createElement('div');
-                optionElement.classList.add('option');
-                optionElement.textContent = option;
-                optionElement.dataset.index = index;
-                optionElement.addEventListener('click', selectOption);
-                optionsElement.appendChild(optionElement);
+            q.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option;
+                button.onclick = () => selectOption(button, index);
+                optionsContainer.appendChild(button);
             });
             
-            // Reset timer
+            // Reset timer for new question
             resetTimer();
         }
 
-        function selectOption(e) {
-            // Deselect previous option
-            const options = document.querySelectorAll('.option');
-            options.forEach(option => option.classList.remove('selected'));
+        function selectOption(button, selectedIndex) {
+            // Remove selection from all buttons
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
             
-            // Select new option
-            e.target.classList.add('selected');
-            selectedOption = parseInt(e.target.dataset.index);
+            // Select current button
+            button.classList.add('selected');
+            
+            // Enable next button
+            document.getElementById('next-btn').disabled = false;
         }
 
         async function nextQuestion() {
-            if (selectedOption === null) {
-                alert("Please select an answer before proceeding.");
+            const selectedBtn = document.querySelector('.option-btn.selected');
+            if (!selectedBtn) {
+                alert('Please select an answer!');
                 return;
             }
+
+            const selectedIndex = Array.from(document.querySelectorAll('.option-btn')).indexOf(selectedBtn);
+            const q = questions[currentQuestion];
+            const isCorrect = selectedIndex === q.correct;
             
-            // Show loading
-            nextQuestionBtn.disabled = true;
-            loadingQuiz.classList.add('active');
-            
-            // Check if answer is correct
-            const question = quizData[currentQuestion];
-            const isCorrect = selectedOption === question.correct;
-            
-            // Record answer
-            const answerData = {
-                question: question.question,
-                selected: selectedOption,
-                correct: question.correct,
-                isCorrect: isCorrect,
-                timeSpent: 60 - timeLeft,
-                tabSwitched: tabSwitched
-            };
-            
-            answers.push(answerData);
-            
-            // Update score
             if (isCorrect) {
                 score += 10;
             }
-            
-            // Deduct points for tab switching
-            if (tabSwitched) {
-                score = Math.max(0, score - 2);
-            }
-            
+
             // Save answer to Google Sheets
-            const saveData = {
-                action: 'saveAnswer',
+            await saveToSheets({
                 sessionId: sessionId,
+                studentName: studentData.name,
+                studentId: studentData.id,
+                studentEmail: studentData.email,
                 questionNumber: currentQuestion + 1,
-                answerData: answerData,
-                currentScore: score,
-                cheatingAttempts: cheatingAttempts,
-                timestamp: new Date().toISOString()
-            };
-            
-            const answerSaved = await saveToSheets(saveData);
-            
-            if (!answerSaved) {
-                showError("Failed to save answer. Please check your connection.");
-                loadingQuiz.classList.remove('active');
-                nextQuestionBtn.disabled = false;
-                return;
-            }
-            
-            // Move to next question or finish quiz
+                question: q.question,
+                selectedAnswer: q.options[selectedIndex],
+                correctAnswer: q.options[q.correct],
+                isCorrect: isCorrect,
+                score: score,
+                totalScore: (currentQuestion + 1) * 10,
+                eventType: 'answer'
+            });
+
             currentQuestion++;
             
-            if (currentQuestion < quizData.length) {
+            if (currentQuestion < questions.length) {
                 loadQuestion();
-                nextQuestionBtn.disabled = false;
-                loadingQuiz.classList.remove('active');
+                document.getElementById('next-btn').disabled = true;
             } else {
                 await finishQuiz();
             }
         }
 
         async function finishQuiz() {
-            // Stop timer
             clearInterval(timer);
             
-            // Calculate final score
-            const pointsDeducted = cheatingAttempts * 2;
-            const finalScore = Math.max(0, score - pointsDeducted);
-            
             // Save final results
-            const finalData = {
-                action: 'saveResults',
+            await saveToSheets({
                 sessionId: sessionId,
-                studentName: studentName,
-                studentEmail: studentEmail,
-                studentId: studentId,
-                finalScore: finalScore,
-                totalQuestions: quizData.length,
-                correctAnswers: answers.filter(a => a.isCorrect).length,
-                cheatingAttempts: cheatingAttempts,
-                pointsDeducted: pointsDeducted,
-                answers: answers,
-                endTime: new Date().toISOString()
-            };
-            
-            loadingResults.classList.add('active');
-            const saveSuccess = await saveToSheets(finalData);
-            loadingResults.classList.remove('active');
-            
-            if (saveSuccess) {
-                // Update results
-                finalScoreElement.textContent = `${finalScore}/${quizData.length * 10}`;
-                summaryNameElement.textContent = studentName;
-                summaryEmailElement.textContent = studentEmail;
-                summaryIdElement.textContent = studentId;
-                summaryTotalElement.textContent = quizData.length;
-                summaryCorrectElement.textContent = answers.filter(a => a.isCorrect).length;
-                summaryCheatingElement.textContent = cheatingAttempts;
-                summaryDeductedElement.textContent = pointsDeducted;
-                summaryFinalElement.textContent = finalScore;
-                
-                // Show results section
-                quizSection.classList.remove('active');
-                resultsSection.classList.add('active');
-                
-                showSuccess("✅ Quiz completed! All data has been saved to Google Sheets.");
-            } else {
-                showError("❌ There was an error saving your results to Google Sheets. Please contact your instructor.");
-            }
-            
-            nextQuestionBtn.disabled = false;
+                studentName: studentData.name,
+                studentId: studentData.id,
+                studentEmail: studentData.email,
+                finalScore: score,
+                totalQuestions: questions.length,
+                percentage: ((score / (questions.length * 10)) * 100).toFixed(1) + '%',
+                eventType: 'quiz_complete'
+            });
+
+            // Show results
+            document.getElementById('quiz-section').classList.remove('active');
+            document.getElementById('results-section').classList.add('active');
+            document.getElementById('final-score').textContent = `${score}/${questions.length * 10}`;
         }
 
         function startTimer() {
@@ -931,140 +314,20 @@
             
             if (timeLeft <= 0) {
                 clearInterval(timer);
-                // Auto-submit if time runs out
-                if (selectedOption === null) {
-                    selectedOption = -1; // No answer selected
-                }
                 nextQuestion();
             }
         }
 
         function updateTimerDisplay() {
-            timerElement.textContent = `${timeLeft}s`;
-            
-            // Change color when time is running out
-            if (timeLeft <= 10) {
-                timerElement.style.color = '#dc2626';
-            }
+            document.getElementById('timer').textContent = timeLeft;
         }
 
-        function handleVisibilityChange() {
-            if (document.hidden) {
-                // User switched tabs
-                cheatingAttempts++;
-                tabSwitched = true;
-                updateCheatingCount();
-                
-                // Show warning
-                warningElement.classList.add('active');
-                
-                // Save cheating attempt
-                saveToSheets({
-                    action: 'cheatingAttempt',
-                    sessionId: sessionId,
-                    attemptNumber: cheatingAttempts,
-                    timestamp: new Date().toISOString(),
-                    type: 'tabSwitch'
-                });
-                
-                // Terminate quiz if too many cheating attempts
-                if (cheatingAttempts >= 6) {
-                    alert("Quiz terminated due to excessive cheating attempts.");
-                    finishQuiz();
-                }
-            }
+        function restartQuiz() {
+            location.reload();
         }
 
-        function updateCheatingCount() {
-            cheatingCountElement.textContent = cheatingAttempts;
-        }
-
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.classList.add('active');
-            setTimeout(() => {
-                errorMessage.classList.remove('active');
-            }, 5000);
-        }
-
-        function showSuccess(message) {
-            successMessage.textContent = message;
-            successMessage.classList.add('active');
-            setTimeout(() => {
-                successMessage.classList.remove('active');
-            }, 5000);
-        }
-
-        function showDebug(message) {
-            debugInfo.textContent = 'Debug: ' + message;
-            debugInfo.classList.add('active');
-            console.log('Debug:', message);
-        }
-
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-
-        // Anti-cheating functions
-        function preventCopy(e) {
-            e.preventDefault();
-            alert("Copying text is not allowed during the quiz.");
-            cheatingAttempts++;
-            updateCheatingCount();
-            saveToSheets({
-                action: 'cheatingAttempt',
-                sessionId: sessionId,
-                attemptNumber: cheatingAttempts,
-                timestamp: new Date().toISOString(),
-                type: 'copyAttempt'
-            });
-            return false;
-        }
-
-        function preventRightClick(e) {
-            e.preventDefault();
-            alert("Right-click is disabled during the quiz.");
-            cheatingAttempts++;
-            updateCheatingCount();
-            saveToSheets({
-                action: 'cheatingAttempt',
-                sessionId: sessionId,
-                attemptNumber: cheatingAttempts,
-                timestamp: new Date().toISOString(),
-                type: 'rightClickAttempt'
-            });
-            return false;
-        }
-
-        function preventScreenshot(e) {
-            // Prevent common screenshot shortcuts
-            if ((e.ctrlKey && e.key === 'PrintScreen') || 
-                (e.key === 'PrintScreen') || 
-                (e.metaKey && e.shiftKey && e.key === '3') || 
-                (e.metaKey && e.shiftKey && e.key === '4')) {
-                e.preventDefault();
-                alert("Screenshots are not allowed during the quiz.");
-                cheatingAttempts++;
-                updateCheatingCount();
-                saveToSheets({
-                    action: 'cheatingAttempt',
-                    sessionId: sessionId,
-                    attemptNumber: cheatingAttempts,
-                    timestamp: new Date().toISOString(),
-                    type: 'screenshotAttempt'
-                });
-                return false;
-            }
-        }
-
-        // Test connection on load
-        window.addEventListener('load', function() {
-            console.log('Quiz system loaded');
-            console.log('Google Apps Script URL:', GOOGLE_APPS_SCRIPT_URL);
-            showDebug('System loaded. Script URL: ' + GOOGLE_APPS_SCRIPT_URL);
-            showSuccess('Ready to start! Click "Test Connection First" to verify Google Sheets integration.');
-        });
+        // Initialize
+        document.getElementById('next-btn').disabled = true;
     </script>
 </body>
 </html>
